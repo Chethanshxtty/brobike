@@ -91,7 +91,8 @@ export const CompareBikes: React.FC = () => {
             return (
               <div
                 key={slotIdx}
-                className="bg-[#111111] border border-white/10 p-6 flex flex-col justify-between relative rounded-none hover:border-white/25 transition-colors duration-300"
+                /* Translucent matrix slots to prevent box/panel look, adhering to luxury automotive aesthetics */
+                className="bg-black/30 backdrop-blur-md border border-white/10 p-6 flex flex-col justify-between relative rounded-none hover:border-[#E8FF00]/40 transition-colors duration-300"
               >
                 
                 {/* Selector Header */}
