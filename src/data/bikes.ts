@@ -1,4 +1,6 @@
+/* Simulated local backend database and catalog parameters */
 export interface Accessory {
+
   id: string;
   name: string;
   price: number;
