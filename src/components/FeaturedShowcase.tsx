@@ -128,11 +128,12 @@ export const FeaturedShowcase: React.FC<FeaturedShowcaseProps> = ({ onSelectBike
                 <motion.img
                   initial={{ opacity: 0, scale: 0.85, y: 35 }}
                   whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                  whileHover={{ scale: 1.05, rotate: isEven ? 1 : -1 }}
                   viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1] }}
+                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                   src={bike.heroImage}
                   alt={bike.name}
-                  className="max-h-[350px] md:max-h-[480px] object-contain relative z-10 transition-transform duration-500 group-hover:scale-[1.03]"
+                  className="max-h-[350px] md:max-h-[480px] object-contain relative z-10 cursor-pointer"
                 />
               </div>
 
