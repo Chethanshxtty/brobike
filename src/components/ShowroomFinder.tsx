@@ -7,7 +7,9 @@ interface ShowroomFinderProps {
 }
 
 export const ShowroomFinder: React.FC<ShowroomFinderProps> = ({ onBookTestRide }) => {
+  // Pincode query matching algorithm for Indian dealership locations
   const [pincodeQuery, setPincodeQuery] = useState('');
+
   const [filterType, setFilterType] = useState<'All' | 'Showroom' | 'Service'>('All');
 
   const handleSearch = (e: React.FormEvent) => {
