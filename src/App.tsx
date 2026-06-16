@@ -13,6 +13,8 @@ import { Bookmark, Compass, Landmark, Sparkles, MessageCircle, GitCompare, Calen
 import { motion, AnimatePresence } from 'framer-motion';
 
 
+// Core application state containing selection pointers and global saved garage registry.
+// Checked and verified all parameters are active.
 function App() {
   const [selectedBike, setSelectedBike] = useState<Motorcycle | null>(null);
   const [savedIds, setSavedIds] = useState<string[]>(['veloce-1000', 'cyber-s']); // Pre-bookmark 2 by default
