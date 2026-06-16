@@ -42,6 +42,7 @@ export const BikeDetails: React.FC<BikeDetailsProps> = ({
   const [bookingDate, setBookingDate] = useState('');
   const [bookingTime, setBookingTime] = useState('11:00 AM');
   const [bookingSubmitted, setBookingSubmitted] = useState(false);
+  const [bookingCode, setBookingCode] = useState('');
 
   // Synchronize initial values if bike changes
   useEffect(() => {
@@ -108,6 +109,8 @@ export const BikeDetails: React.FC<BikeDetailsProps> = ({
   const handleBookingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!bookingDate) return;
+    const code = 'BB-' + Math.floor(100000 + Math.random() * 900000);
+    setBookingCode(code);
     setBookingSubmitted(true);
   };
 
@@ -741,7 +744,8 @@ export const BikeDetails: React.FC<BikeDetailsProps> = ({
                 <Smile className="h-8 w-8 mx-auto" />
                 <h4 className="font-anton text-lg uppercase">TEST RIDE SECURED!</h4>
                 <p className="font-inter text-[10px] text-success leading-relaxed">
-                  Your reservation is confirmed at **{bookingShowroom}** on **{bookingDate}** around **{bookingTime}**. Bring your license!
+                  Your reservation is confirmed at **{bookingShowroom}** on **{bookingDate}** around **{bookingTime}**. 
+                  Verification PIN: <span className="font-anton text-[#E8FF00]">{bookingCode}</span>. Bring your license!
                 </p>
                 <button
                   onClick={() => setBookingSubmitted(false)}
