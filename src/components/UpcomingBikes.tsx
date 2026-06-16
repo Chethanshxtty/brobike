@@ -9,11 +9,12 @@ export const UpcomingBikes: React.FC = () => {
   const [emailInput, setEmailInput] = useState('');
   const [successId, setSuccessId] = useState<string | null>(null);
 
-  // Countdown calculations
+  // Countdown calculations - ticks every second to compute days, hours, minutes, and seconds dynamically
   const [timeRemaining, setTimeRemaining] = useState<{ [key: string]: { days: number; hours: number; minutes: number; seconds: number } }>({});
 
   useEffect(() => {
     const calculateTime = () => {
+
       const updated: typeof timeRemaining = {};
       UPCOMING_BIKES.forEach(bike => {
         // Mock a future timestamp by adding countdownDays
