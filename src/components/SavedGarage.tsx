@@ -42,7 +42,7 @@ export const SavedGarage: React.FC<SavedGarageProps> = ({ savedIds, onRemove, on
                 {savedBikes.map((bike) => (
                   <div
                     key={bike.id}
-                    className="bg-[#111111] border border-white/10 p-6 flex flex-col sm:flex-row items-center justify-between gap-6 hover:border-[#E8FF00]/40 transition-colors duration-200"
+                    className="bg-black/30 backdrop-blur-md border border-white/10 p-6 flex flex-col sm:flex-row items-center justify-between gap-6 hover:border-[#E8FF00]/40 transition-colors duration-200"
                   >
                     {/* Bike info */}
                     <div className="flex items-center gap-6 w-full sm:w-auto">
@@ -106,7 +106,7 @@ export const SavedGarage: React.FC<SavedGarageProps> = ({ savedIds, onRemove, on
                 GARAGE INSIGHTS
               </h3>
 
-              <div className="bg-[#111111] border border-white/10 p-6 space-y-6">
+              <div className="bg-black/30 backdrop-blur-md border border-white/10 p-6 space-y-6">
                 <div className="flex gap-3 items-start">
                   <TrendingDown className="h-5 w-5 text-success flex-shrink-0 mt-0.5" />
                   <div>
@@ -143,7 +143,7 @@ export const SavedGarage: React.FC<SavedGarageProps> = ({ savedIds, onRemove, on
 
           </div>
         ) : (
-          <div className="bg-[#111111] border border-white/10 p-16 text-center flex flex-col items-center justify-center">
+          <div className="bg-black/30 backdrop-blur-md border border-white/10 p-16 text-center flex flex-col items-center justify-center">
             <Heart className="h-12 w-12 text-white/20 mb-4 animate-pulse" />
             <h3 className="font-anton text-2xl uppercase mb-2">Your garage is currently empty</h3>
             <p className="font-inter text-white/50 text-sm max-w-sm mb-6">
