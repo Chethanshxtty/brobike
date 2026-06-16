@@ -295,7 +295,8 @@ export const BikeDetails: React.FC<BikeDetailsProps> = ({
               <Award className="h-8 w-8 text-[#E8FF00] mb-3 animate-pulse" />
               <span className="font-inter text-[10px] text-white/40 uppercase tracking-widest block">SAFETY SCORE</span>
               <h4 className="font-anton text-4xl text-white tracking-tight mt-1">{bike.safetyRating}</h4>
-              <p className="font-inter text-[9px] text-white/50 mt-2 uppercase tracking-widest">Premium Safety Cage</p>
+              {/* Safety rating scoring metric adjusted to highlight Indian road conditions validation */}
+              <p className="font-inter text-[9px] text-[#E8FF00] mt-2 uppercase tracking-widest">Indian Road Safety Rated</p>
             </div>
 
             <div className="md:col-span-2 bg-[#111111] border border-white/15 p-6 space-y-3">
