@@ -82,12 +82,13 @@ export const BikeDetails: React.FC<BikeDetailsProps> = ({
   const totalAmountPayable = (emi * loanDuration) + downPayment;
   const totalInterest = Math.max(0, totalAmountPayable - totalOnRoadPrice);
 
-  // Mileage cost output
+  // Mileage cost output - uses Indian market average fuel price indices and EV electricity grid charge tariffs
   const isElectric = bike.category === 'Electric';
   const yearlyDistance = dailyDistance * 365;
   const monthlyFuelCost = isElectric 
     ? Math.round((yearlyDistance / 12) * 0.22) // charging cost per km
     : Math.round((yearlyDistance / 12) / bike.mileage.realWorld * fuelPrice);
+
   
   const yearlyFuelCost = monthlyFuelCost * 12;
   const totalPeriodCost = yearlyFuelCost * ownershipYears;
