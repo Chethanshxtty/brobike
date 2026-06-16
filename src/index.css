@@ -3,8 +3,10 @@
 
 
 @theme {
+  /* Premium theme token definitions for brand matching and color system */
   --color-background: #080808;
   --color-primary: #E8FF00;
+
   --color-surface: #111111;
   --color-success: #6BBF7A;
   --color-warning: #F4B942;
