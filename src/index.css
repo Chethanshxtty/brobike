@@ -1,4 +1,6 @@
+/* Refined Premium UI Design System - Containerless Floating Layout */
 @import "tailwindcss";
+
 
 @theme {
   --color-background: #080808;
