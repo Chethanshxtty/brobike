@@ -1,145 +1,225 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { type Motorcycle, MOTORCYCLES } from '../data/bikes';
-import { SlidersHorizontal, Eye, Fuel } from 'lucide-react';
-
+import { Eye, Landmark, Compass, Award } from 'lucide-react';
 
 interface SmartFinderProps {
   onSelectBike: (bike: Motorcycle) => void;
 }
 
+const BUDGET_PRESETS = [
+  { label: '1.5 Lakh', value: 150000 },
+  { label: '2.0 Lakh', value: 200000 },
+  { label: '2.5 Lakh', value: 250000 },
+  { label: '3.0 Lakh', value: 300000 },
+  { label: '3.5 Lakh', value: 350000 },
+  { label: '4.0 Lakh', value: 400000 }
+];
+
+const INDIAN_COMPANIES = [
+  'All Brands',
+  'Royal Enfield',
+  'Bajaj',
+  'TVS',
+  'Hero MotoCorp',
+  'Ola Electric',
+  'Ather Energy',
+  'Ultraviolette'
+];
+
 export const SmartFinder: React.FC<SmartFinderProps> = ({ onSelectBike }) => {
-  const [budget, setBudget] = useState(600000);
-  const [vehicleType, setVehicleType] = useState<'Petrol' | 'Electric' | 'Both'>('Both');
-  const [purpose, setPurpose] = useState<string>('All');
+  const [selectedPreset, setSelectedPreset] = useState<number | null>(null);
+  const [customBudget, setCustomBudget] = useState<string>('');
+  const [selectedBrand, setSelectedBrand] = useState<string>('All Brands');
 
-  const purposes = [
-    { value: 'All', label: 'All Intents' },
-    { value: 'Mileage', label: 'Best Mileage' },
-    { value: 'Racing', label: 'Racing / Speed' },
-    { value: 'Touring', label: 'Touring Comfort' },
-    { value: 'Adventure', label: 'Adventure / Off-Road' },
-    { value: 'Commute', label: 'Daily Commute' },
-    { value: 'Premium', label: 'Prestige & Status' }
-  ];
+  // Derive the active budget limit
+  const activeBudget = customBudget !== '' 
+    ? parseFloat(customBudget) * 100000 // Convert Lakh to absolute rupee if it has a decimal
+    : (selectedPreset || 9900000); // Defaults to high number if none
 
+  const handlePresetSelect = (value: number) => {
+    setSelectedPreset(value);
+    setCustomBudget((value / 100000).toFixed(1)); // Sync custom budget input in Lakh units
+  };
+
+  const handleCustomBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    if (val === '' || /^\d*\.?\d*$/.test(val)) {
+      setCustomBudget(val);
+      // Check if it matches a preset
+      const numericVal = parseFloat(val) * 100000;
+      const foundPreset = BUDGET_PRESETS.find(p => p.value === numericVal);
+      if (foundPreset) {
+        setSelectedPreset(foundPreset.value);
+      } else {
+        setSelectedPreset(null);
+      }
+    }
+  };
+
+  const clearFilters = () => {
+    setSelectedPreset(null);
+    setCustomBudget('');
+    setSelectedBrand('All Brands');
+  };
+
+  // Filter only Indian company bikes matching budget and brand selections
   const filteredBikes = MOTORCYCLES.filter((bike) => {
-    // 1. Budget Filter
-    if (bike.price > budget) return false;
+    // 1. Brand check
+    if (selectedBrand !== 'All Brands' && bike.brand !== selectedBrand) {
+      return false;
+    }
 
-    // 2. Vehicle Type Filter
-    const isElectric = bike.category === 'Electric';
-    if (vehicleType === 'Petrol' && isElectric) return false;
-    if (vehicleType === 'Electric' && !isElectric) return false;
-
-    // 3. Purpose Filter
-    if (purpose !== 'All') {
-      if (purpose === 'Mileage' && bike.mileage.claimed < 20 && bike.category !== 'Electric') return false;
-      if (purpose === 'Racing' && bike.category !== 'Sport') return false;
-      if (purpose === 'Touring' && bike.category !== 'Adventure' && bike.category !== 'Premium') return false;
-      if (purpose === 'Adventure' && bike.category !== 'Adventure') return false;
-      if (purpose === 'Commute' && bike.category !== 'Mileage' && bike.category !== 'Electric') return false;
-      if (purpose === 'Premium' && bike.category !== 'Premium' && bike.category !== 'Sport') return false;
+    // 2. Budget check (comparing ex-showroom base price)
+    if (bike.price > activeBudget) {
+      return false;
     }
 
     return true;
   });
 
+  // EMI Calculator Helper: 20% down payment, 9.5% interest, 36 months
+  const calculateEMI = (exShowroomPrice: number, rto: number, insurance: number, warranty: number) => {
+    const totalOnRoadPrice = exShowroomPrice + rto + insurance + warranty;
+    const downPayment = Math.round(totalOnRoadPrice * 0.2);
+    const loanPrincipal = Math.max(0, totalOnRoadPrice - downPayment);
+    const annualInterestRate = 9.5;
+    const loanDurationMonths = 36;
+    
+    const r = (annualInterestRate / 100) / 12;
+    if (loanPrincipal <= 0) return 0;
+    
+    const emi = Math.round(
+      loanPrincipal * r * Math.pow(1 + r, loanDurationMonths) / 
+      (Math.pow(1 + r, loanDurationMonths) - 1)
+    );
+    return emi;
+  };
+
   return (
-    <section className="bg-[#080808] text-white py-24 border-t border-white/10">
+    <section className="bg-slate-50 text-slate-900 py-20 border-t border-slate-200">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         
-        {/* Section Title */}
+        {/* Section Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
           <div>
-            <span className="font-anton tracking-wider text-[#E8FF00] text-sm block mb-3 uppercase">
-              SMART ALGORITHM
+            <span className="font-anton tracking-wider text-orange-600 text-sm block mb-2 uppercase">
+              INDIAN GARAGE CATALOG
             </span>
-            <h2 className="font-anton text-5xl md:text-8xl uppercase leading-none tracking-tight">
-              BIKE FINDER
+            <h2 className="font-anton text-4xl md:text-7xl uppercase leading-none tracking-tight text-slate-900">
+              FIND YOUR BIKE
             </h2>
-          </div>
-          <div className="flex items-center gap-2 text-white/50 text-sm font-inter">
-            <SlidersHorizontal className="h-4 w-4 text-[#E8FF00]" />
-            <span>Refine filters to match your garage profile</span>
+            <p className="font-inter text-slate-500 text-sm md:text-base max-w-xl mt-3 leading-relaxed">
+              Select or enter your target budget in Lakhs, choose an Indian motorcycle manufacturer, and compare real-world mileage and estimated EMI side-by-side.
+            </p>
           </div>
         </div>
 
-        {/* Filters Panel */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 p-8 bg-[#111111] border border-white/10 rounded-none mb-12">
+        {/* Filter Panel (Sleek and Trendy Light Container) */}
+        <div className="bg-white border border-slate-200 p-8 shadow-sm rounded-2xl mb-12 space-y-8">
           
-          {/* Column 1: Budget Slider */}
+          {/* Row 1: Budget Controls */}
           <div className="space-y-4">
-            <div className="flex justify-between items-center">
-              <label className="font-anton text-sm tracking-wider uppercase text-white/70">MAX BUDGET</label>
-              <span className="font-anton text-lg text-[#E8FF00]">
-                {budget === 600000 ? 'No Limit' : `₹${(budget / 100000).toFixed(2)} Lakh`}
-              </span>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+              <label className="font-anton text-xs tracking-wider uppercase text-slate-500">
+                1. SELECT OR ENTER BUDGET LIMIT
+              </label>
+              {activeBudget !== 9900000 && (
+                <span className="font-anton text-sm text-orange-600">
+                  Showing bikes up to ₹{(activeBudget / 100000).toFixed(2)} Lakh
+                </span>
+              )}
             </div>
-            <input
-              type="range"
-              min="100000"
-              max="600000"
-              step="10000"
-              value={budget}
-              onChange={(e) => setBudget(Number(e.target.value))}
-              className="w-full h-1.5 bg-black rounded-none appearance-none cursor-pointer accent-[#E8FF00]"
-            />
-            <div className="flex justify-between text-[10px] font-inter text-white/40">
-              <span>₹1.0L</span>
-              <span>₹3.5L</span>
-              <span>₹6.0L+</span>
-            </div>
-          </div>
+            
+            {/* Presets Chips + Text Input */}
+            <div className="flex flex-wrap items-center gap-3">
+              {BUDGET_PRESETS.map((preset) => {
+                const isActive = selectedPreset === preset.value;
+                return (
+                  <button
+                    key={preset.value}
+                    onClick={() => handlePresetSelect(preset.value)}
+                    className={`px-4 py-2 text-xs font-anton uppercase rounded-full border transition-all duration-200 cursor-pointer ${
+                      isActive
+                        ? 'bg-orange-600 border-orange-600 text-white shadow-sm shadow-orange-500/20'
+                        : 'bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200/60'
+                    }`}
+                  >
+                    {preset.label}
+                  </button>
+                );
+              })}
 
-          {/* Column 2: Vehicle Type */}
-          <div className="space-y-4">
-            <label className="font-anton text-sm tracking-wider uppercase text-white/70 block">ENGINE PROPULSION</label>
-            <div className="grid grid-cols-3 gap-2 bg-black p-1 border border-white/15">
-              {(['Petrol', 'Electric', 'Both'] as const).map((type) => (
-                <button
-                  key={type}
-                  onClick={() => setVehicleType(type)}
-                  className={`py-2 text-xs font-anton uppercase transition-all duration-200 ${
-                    vehicleType === type
-                      ? 'bg-[#E8FF00] text-black'
-                      : 'text-white/60 hover:text-white'
-                  }`}
-                >
-                  {type}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Column 3: Purpose Tags */}
-          <div className="space-y-4">
-            <label className="font-anton text-sm tracking-wider uppercase text-white/70 block">RIDING INTENT</label>
-            <div className="relative">
-              <select
-                value={purpose}
-                onChange={(e) => setPurpose(e.target.value)}
-                className="w-full bg-black border border-white/15 px-4 py-2.5 text-xs font-anton text-white/95 uppercase rounded-none focus:outline-none focus:border-[#E8FF00] appearance-none"
+              <button
+                onClick={() => {
+                  setSelectedPreset(null);
+                  setCustomBudget('');
+                }}
+                className={`px-4 py-2 text-xs font-anton uppercase rounded-full border transition-all duration-200 cursor-pointer ${
+                  selectedPreset === null && customBudget === ''
+                    ? 'bg-orange-600 border-orange-600 text-white shadow-sm shadow-orange-500/20'
+                    : 'bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200/60'
+                }`}
               >
-                {purposes.map((p) => (
-                  <option key={p.value} value={p.value} className="bg-neutral-900">
-                    {p.label}
-                  </option>
-                ))}
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-white/60">
-                ▼
+                Show All
+              </button>
+
+              {/* Custom Input Box */}
+              <div className="flex items-center gap-2 border border-slate-200 bg-slate-50 px-3 py-1.5 rounded-full min-w-[200px] ml-auto">
+                <span className="text-[10px] font-anton text-slate-400 uppercase">Custom (Lakh):</span>
+                <input
+                  type="text"
+                  placeholder="e.g. 2.25"
+                  value={customBudget}
+                  onChange={handleCustomBudgetChange}
+                  className="bg-transparent border-0 w-full focus:outline-none text-xs font-anton text-slate-800"
+                />
               </div>
             </div>
           </div>
 
+          {/* Row 2: Indian Companies List */}
+          <div className="space-y-4 pt-6 border-t border-slate-100">
+            <label className="font-anton text-xs tracking-wider uppercase text-slate-500 block">
+              2. CHOOSE MANUFACTURER (INDIAN BRANDS)
+            </label>
+            <div className="flex flex-wrap gap-2.5">
+              {INDIAN_COMPANIES.map((brand) => {
+                const isActive = selectedBrand === brand;
+                return (
+                  <button
+                    key={brand}
+                    onClick={() => setSelectedBrand(brand)}
+                    className={`px-4 py-2 text-xs font-anton uppercase border rounded-xl transition-all duration-200 cursor-pointer ${
+                      isActive
+                        ? 'bg-slate-900 border-slate-900 text-white shadow-sm'
+                        : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50'
+                    }`}
+                  >
+                    {brand === 'All Brands' ? '🇮🇳 All Indian Brands' : brand}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
         </div>
 
-        {/* Filter Results Display */}
+        {/* Results Deck */}
         <div>
-          <h3 className="font-anton text-xs tracking-widest text-white/40 uppercase mb-6">
-            MATCHING MACHINES ({filteredBikes.length})
-          </h3>
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="font-anton text-xs tracking-widest text-slate-400 uppercase">
+              MATCHING MACHINES ({filteredBikes.length})
+            </h3>
+            {(selectedBrand !== 'All Brands' || customBudget !== '' || selectedPreset !== null) && (
+              <button
+                onClick={clearFilters}
+                className="text-xs font-anton text-orange-600 hover:underline uppercase"
+              >
+                Clear Filters ×
+              </button>
+            )}
+          </div>
 
           <AnimatePresence mode="popLayout">
             {filteredBikes.length > 0 ? (
@@ -147,85 +227,115 @@ export const SmartFinder: React.FC<SmartFinderProps> = ({ onSelectBike }) => {
                 layout
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
               >
-                {filteredBikes.map((bike) => (
-                  <motion.div
-                    layout
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.3 }}
-                    key={bike.id}
-                    className="bg-[#111111] border border-white/10 p-6 flex flex-col justify-between group relative hover:border-[#E8FF00] transition-colors duration-300"
-                  >
-                    <div>
-                      {/* Top Badges */}
-                      <div className="flex justify-between items-center mb-4">
-                        <span className="font-inter text-[10px] text-white/40 uppercase tracking-widest">
-                          {bike.category}
-                        </span>
-                        <span className="font-anton text-xs text-[#E8FF00] px-2 py-0.5 bg-black">
-                          {bike.safetyRating} Safety
-                        </span>
-                      </div>
+                {filteredBikes.map((bike) => {
+                  const estimatedEMI = calculateEMI(
+                    bike.price,
+                    bike.pricing.rto,
+                    bike.pricing.insuranceZeroDep,
+                    bike.pricing.warranty
+                  );
 
-                      {/* Motorcycle Image */}
-                      <div className="h-44 w-full flex items-center justify-center overflow-hidden mb-4 relative">
-                        <img
-                          src={bike.heroImage}
-                          alt={bike.name}
-                          className="max-h-36 object-contain transform group-hover:scale-105 transition-transform duration-300 relative z-10"
-                        />
-                      </div>
-
-
-                      {/* Text */}
-                      <h4 className="font-anton text-2xl uppercase tracking-tight text-white group-hover:text-[#E8FF00] transition-colors duration-300">
-                        {bike.name}
-                      </h4>
-                      <p className="font-inter text-xs text-white/60 line-clamp-2 mt-1 mb-4">
-                        {bike.tagline}
-                      </p>
-                    </div>
-
-                    {/* Footer Info */}
-                    <div className="pt-4 border-t border-white/5 flex items-center justify-between">
+                  return (
+                    <motion.div
+                      layout
+                      initial={{ opacity: 0, scale: 0.96 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.96 }}
+                      transition={{ duration: 0.3 }}
+                      key={bike.id}
+                      className="bg-white border border-slate-200/80 p-6 flex flex-col justify-between group relative shadow-sm hover:shadow-md hover:border-orange-500/50 rounded-2xl transition-all duration-300"
+                    >
                       <div>
-                        <span className="text-[10px] font-inter text-white/40 block uppercase">ON-ROAD PRICE</span>
-                        <span className="font-anton text-base text-white">
-                          ₹{((bike.price + bike.pricing.rto + bike.pricing.insuranceZeroDep) / 100000).toFixed(2)}L
-                        </span>
+                        {/* Badges Header */}
+                        <div className="flex justify-between items-center mb-4">
+                          <span className="font-inter text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+                            {bike.brand} • {bike.category}
+                          </span>
+                          <span className="font-anton text-[10px] text-slate-800 px-2 py-0.5 bg-slate-100 rounded">
+                            {bike.safetyRating} Safety
+                          </span>
+                        </div>
+
+                        {/* Motorcycle Product Shot */}
+                        <div className="h-44 w-full flex items-center justify-center overflow-hidden mb-4 relative bg-slate-50/50 rounded-xl">
+                          <div 
+                            className="absolute inset-0 opacity-5 scale-90 rounded-full blur-3xl transition-opacity duration-300 group-hover:opacity-10"
+                            style={{ backgroundColor: bike.themeColor }}
+                          />
+                          <img
+                            src={bike.heroImage}
+                            alt={bike.name}
+                            className="max-h-36 object-contain transform group-hover:scale-105 transition-transform duration-500 relative z-10"
+                          />
+                        </div>
+
+                        {/* Text Content */}
+                        <h4 className="font-anton text-2xl uppercase tracking-tight text-slate-900 group-hover:text-orange-600 transition-colors duration-300">
+                          {bike.name}
+                        </h4>
+                        <p className="font-inter text-xs text-slate-500 line-clamp-2 mt-1 mb-4 leading-relaxed">
+                          {bike.tagline}
+                        </p>
+
+                        {/* Key Indian specs: Mileage & EMI */}
+                        <div className="grid grid-cols-2 gap-4 bg-slate-50 p-3 rounded-xl border border-slate-100 mb-6 text-xs font-inter">
+                          <div className="flex items-center gap-2">
+                            <Compass className="h-4 w-4 text-orange-600 flex-shrink-0" />
+                            <div>
+                              <span className="text-[9px] text-slate-400 block uppercase font-medium">Real Mileage</span>
+                              <span className="font-anton text-slate-800 text-[13px]">
+                                {bike.mileage.realWorld} {bike.category === 'Electric' ? 'km (Range)' : 'km/l'}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 border-l border-slate-200 pl-3">
+                            <Landmark className="h-4 w-4 text-orange-600 flex-shrink-0" />
+                            <div>
+                              <span className="text-[9px] text-slate-400 block uppercase font-medium">Estimated EMI</span>
+                              <span className="font-anton text-slate-800 text-[13px]">
+                                ₹{new Intl.NumberFormat('en-IN').format(estimatedEMI)}/mo
+                              </span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      
-                      <button
-                        onClick={() => onSelectBike(bike)}
-                        className="p-2 bg-black border border-white/10 text-white hover:bg-[#E8FF00] hover:text-black hover:border-[#E8FF00] transition-colors duration-200"
-                      >
-                        <Eye className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </motion.div>
-                ))}
+
+                      {/* On-Road Price & Actions */}
+                      <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <div>
+                          <span className="text-[9px] font-bold text-slate-400 block uppercase tracking-wide">EX-SHOWROOM PRICE</span>
+                          <span className="font-anton text-lg text-slate-800">
+                            ₹{(bike.price / 100000).toFixed(2)} Lakh
+                          </span>
+                        </div>
+                        
+                        <button
+                          onClick={() => onSelectBike(bike)}
+                          className="px-4 py-2 bg-slate-900 text-white font-anton text-xs uppercase rounded-lg hover:bg-orange-600 hover:shadow-sm transition-all duration-200 flex items-center gap-1.5 cursor-pointer"
+                        >
+                          <Eye className="h-3.5 w-3.5" /> Details
+                        </button>
+                      </div>
+                    </motion.div>
+                  );
+                })}
               </motion.div>
             ) : (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="bg-[#111111] border border-white/10 p-12 text-center flex flex-col items-center justify-center"
+                className="bg-white border border-slate-200 p-12 text-center flex flex-col items-center justify-center rounded-2xl shadow-sm"
               >
-                <Fuel className="h-10 w-10 text-danger mb-4" />
-                <h4 className="font-anton text-2xl uppercase mb-2">No direct matches found</h4>
-                <p className="font-inter text-white/50 text-sm max-w-md mb-6 leading-relaxed">
-                  Try widening your budget slider or selecting "All Intents" to discover additional options.
+                <Award className="h-10 w-10 text-slate-300 mb-4" />
+                <h4 className="font-anton text-2xl uppercase text-slate-800 mb-2">No matching bikes found</h4>
+                <p className="font-inter text-slate-400 text-sm max-w-md mb-6 leading-relaxed">
+                  Try increasing your budget limit or choosing a different manufacturer to explore the complete catalog.
                 </p>
                 <button
-                  onClick={() => {
-                    setBudget(600000);
-                    setVehicleType('Both');
-                    setPurpose('All');
-                  }}
-                  className="px-6 py-2.5 bg-[#E8FF00] text-black font-anton text-xs uppercase hover:bg-white transition-colors duration-200"
+                  onClick={clearFilters}
+                  className="px-6 py-2.5 bg-orange-600 text-white font-anton text-xs uppercase rounded-full hover:bg-slate-900 transition-colors duration-200 cursor-pointer"
                 >
-                  RESET FILTER MATRIX
+                  RESET SEARCH FILTERS
                 </button>
               </motion.div>
             )}

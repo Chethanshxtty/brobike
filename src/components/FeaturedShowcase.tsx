@@ -3,31 +3,33 @@ import { motion } from 'framer-motion';
 import { type Motorcycle, MOTORCYCLES } from '../data/bikes';
 import { Compass, Eye, ShieldCheck, Zap } from 'lucide-react';
 
-
 interface FeaturedShowcaseProps {
   onSelectBike: (bike: Motorcycle) => void;
 }
 
 export const FeaturedShowcase: React.FC<FeaturedShowcaseProps> = ({ onSelectBike }) => {
+  // Select top 3 distinct bikes to feature in the Showcase section
+  const featuredBikes = MOTORCYCLES.slice(0, 3);
+
   return (
-    <section className="bg-[#080808] text-white py-24 border-t border-white/10">
+    <section className="bg-white text-slate-900 py-24 border-t border-slate-200">
       
       {/* Intro Header */}
       <div className="max-w-7xl mx-auto px-6 md:px-12 mb-20">
-        <span className="font-anton tracking-wider text-[#E8FF00] text-sm block mb-3 uppercase">
+        <span className="font-anton tracking-wider text-orange-600 text-sm block mb-3 uppercase">
           CURATED FLEET
         </span>
-        <h2 className="font-anton text-5xl md:text-8xl uppercase leading-none tracking-tight">
-          THE FEATURED MACHINES
+        <h2 className="font-anton text-5xl md:text-8xl uppercase leading-none tracking-tight text-slate-900">
+          THE FEATURED MODELS
         </h2>
-        <p className="font-inter text-white/50 text-base md:text-lg max-w-xl mt-4 leading-relaxed">
-          Five distinct engineering masterpieces designed to redefine their categories. Hover, inspect, and select your ride.
+        <p className="font-inter text-slate-500 text-base md:text-lg max-w-xl mt-4 leading-relaxed">
+          Engineering masterpieces built by premier Indian manufacturers. Hover, inspect, and select your ride.
         </p>
       </div>
 
       {/* Grid of full width sections */}
       <div className="space-y-36">
-        {MOTORCYCLES.map((bike, idx) => {
+        {featuredBikes.map((bike, idx) => {
           const isEven = idx % 2 === 0;
           return (
             <div
@@ -48,57 +50,57 @@ export const FeaturedShowcase: React.FC<FeaturedShowcaseProps> = ({ onSelectBike
                 >
                   <div className="flex items-center gap-2">
                     <span
-                      className="px-2 py-0.5 text-xs font-anton tracking-wider text-black uppercase"
+                      className="px-2.5 py-0.5 text-xs font-anton tracking-wider text-white uppercase rounded"
                       style={{ backgroundColor: bike.themeColor }}
                     >
-                      {bike.category}
+                      {bike.brand}
                     </span>
-                    <span className="text-white/40 font-inter text-xs tracking-widest uppercase">
-                      SERIES MODEL
+                    <span className="text-slate-400 font-inter text-xs tracking-widest uppercase">
+                      {bike.category} SERIES
                     </span>
                   </div>
 
-                  <h3 className="font-anton text-5xl md:text-7xl uppercase leading-none tracking-tight">
+                  <h3 className="font-anton text-5xl md:text-7xl uppercase leading-none tracking-tight text-slate-900">
                     {bike.name}
                   </h3>
 
-                  <p className="font-inter text-white/70 text-sm md:text-base leading-relaxed">
+                  <p className="font-inter text-slate-600 text-sm md:text-base leading-relaxed">
                     {bike.description}
                   </p>
 
                   {/* Highlights Grid */}
-                  <div className="grid grid-cols-2 gap-6 py-4 border-y border-white/10">
+                  <div className="grid grid-cols-2 gap-6 py-4 border-y border-slate-200">
                     <div className="flex items-start gap-2.5">
-                      <Zap className="h-4.5 w-4.5 text-[#E8FF00] mt-1" />
+                      <Zap className="h-4.5 w-4.5 text-orange-600 mt-1" />
                       <div>
-                        <span className="font-inter text-[10px] text-white/40 uppercase tracking-widest block">POWER</span>
-                        <span className="font-anton text-lg text-white block uppercase mt-0.5">{bike.specs.power.split('@')[0]}</span>
+                        <span className="font-inter text-[10px] text-slate-400 uppercase tracking-widest block font-semibold">POWER</span>
+                        <span className="font-anton text-lg text-slate-800 block uppercase mt-0.5">{bike.specs.power.split('@')[0]}</span>
                       </div>
                     </div>
 
                     <div className="flex items-start gap-2.5">
-                      <Compass className="h-4.5 w-4.5 text-[#E8FF00] mt-1" />
+                      <Compass className="h-4.5 w-4.5 text-orange-600 mt-1" />
                       <div>
-                        <span className="font-inter text-[10px] text-white/40 uppercase tracking-widest block">TOP SPEED</span>
-                        <span className="font-anton text-lg text-white block uppercase mt-0.5">{bike.specs.topSpeed}</span>
+                        <span className="font-inter text-[10px] text-slate-400 uppercase tracking-widest block font-semibold">TOP SPEED</span>
+                        <span className="font-anton text-lg text-slate-800 block uppercase mt-0.5">{bike.specs.topSpeed}</span>
                       </div>
                     </div>
 
                     <div className="flex items-start gap-2.5">
-                      <ShieldCheck className="h-4.5 w-4.5 text-[#E8FF00] mt-1" />
+                      <ShieldCheck className="h-4.5 w-4.5 text-orange-600 mt-1" />
                       <div>
-                        <span className="font-inter text-[10px] text-white/40 uppercase tracking-widest block">SAFETY SCORE</span>
-                        <span className="font-anton text-lg text-white block uppercase mt-0.5">{bike.safetyRating}</span>
+                        <span className="font-inter text-[10px] text-slate-400 uppercase tracking-widest block font-semibold">SAFETY SCORE</span>
+                        <span className="font-anton text-lg text-slate-800 block uppercase mt-0.5">{bike.safetyRating.split('/')[0]}</span>
                       </div>
                     </div>
 
                     <div className="flex items-start gap-2.5">
-                      <span className="h-4.5 w-4.5 text-[#E8FF00] font-anton text-xs font-bold text-center mt-1 flex items-center justify-center border border-[#E8FF00] rounded-none">
+                      <span className="h-4.5 w-4.5 text-orange-600 font-anton text-xs font-bold text-center mt-1 flex items-center justify-center border border-orange-600 rounded">
                         KM
                       </span>
                       <div>
-                        <span className="font-inter text-[10px] text-white/40 uppercase tracking-widest block">MILEAGE/RANGE</span>
-                        <span className="font-anton text-lg text-white block uppercase mt-0.5">{bike.mileageSpec.split(' ')[0]} {bike.category === 'Electric' ? 'km' : 'km/l'}</span>
+                        <span className="font-inter text-[10px] text-slate-400 uppercase tracking-widest block font-semibold">MILEAGE/RANGE</span>
+                        <span className="font-anton text-lg text-slate-800 block uppercase mt-0.5">{bike.mileageSpec.split(' ')[0]} {bike.category === 'Electric' ? 'km' : 'km/l'}</span>
                       </div>
                     </div>
                   </div>
@@ -106,14 +108,14 @@ export const FeaturedShowcase: React.FC<FeaturedShowcaseProps> = ({ onSelectBike
                   <div className="flex flex-col sm:flex-row gap-4 pt-2">
                     <button
                       onClick={() => onSelectBike(bike)}
-                      className="flex-1 sm:flex-none px-8 py-3.5 bg-[#E8FF00] text-black font-anton text-base uppercase hover:bg-white transition-colors duration-200 flex items-center justify-center gap-2"
+                      className="flex-1 sm:flex-none px-8 py-3.5 bg-orange-600 text-white font-anton text-base uppercase rounded-xl hover:bg-slate-900 transition-colors duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-sm shadow-orange-500/10"
                     >
                       <Eye className="h-4 w-4" /> VIEW SPEC DETAILS
                     </button>
                     
                     <div className="flex items-center">
-                      <span className="font-inter text-xs text-white/40 mr-2 uppercase">STARTING FROM</span>
-                      <span className="font-anton text-xl text-white">
+                      <span className="font-inter text-xs text-slate-400 mr-2 uppercase">STARTING FROM</span>
+                      <span className="font-anton text-xl text-slate-800">
                         {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(bike.price)}
                       </span>
                     </div>
@@ -125,6 +127,10 @@ export const FeaturedShowcase: React.FC<FeaturedShowcaseProps> = ({ onSelectBike
               <div className={`w-full md:w-1/2 flex items-center justify-center relative group ${
                 isEven ? 'order-2' : 'order-2 md:order-1'
               }`}>
+                <div 
+                  className="absolute w-72 h-72 rounded-full blur-[80px] opacity-10 transition-opacity group-hover:opacity-20 pointer-events-none"
+                  style={{ backgroundColor: bike.themeColor }}
+                />
                 <motion.img
                   initial={{ opacity: 0, scale: 0.85, y: 35 }}
                   whileInView={{ opacity: 1, scale: 1, y: 0 }}
@@ -136,7 +142,6 @@ export const FeaturedShowcase: React.FC<FeaturedShowcaseProps> = ({ onSelectBike
                   className="max-h-[350px] md:max-h-[480px] object-contain relative z-10 cursor-pointer"
                 />
               </div>
-
 
             </div>
           );

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { MOTORCYCLES, type Motorcycle } from '../data/bikes';
 import { GitCompare, Sparkles, Check, X } from 'lucide-react';
 
-
 export const CompareBikes: React.FC = () => {
   // Pre-load slots with the first three bikes by default, leaving the fourth empty
   const [selectedIds, setSelectedIds] = useState<string[]>([
@@ -55,32 +54,24 @@ export const CompareBikes: React.FC = () => {
     if (bike.category === 'Adventure' || bike.category === 'Premium') {
       highlights.push('Best Touring');
     }
-    // Best Comfort (Cruiser stance)
-    if (bike.id === 'imperial-1200') {
-      highlights.push('Best Comfort');
-    }
-    // Best Features (High TFT dashboard & quickshifter options)
-    if (bike.id === 'veloce-1000' || bike.id === 'imperial-1200') {
-      highlights.push('Best Features');
-    }
 
     return highlights;
   };
 
   return (
-    <section className="bg-[#080808] text-white py-24 border-t border-white/10">
+    <section className="bg-slate-50 text-slate-900 py-24 border-t border-slate-200">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         
         {/* Section Header */}
         <div className="mb-16">
-          <span className="font-anton tracking-wider text-[#E8FF00] text-sm block mb-3 uppercase">
+          <span className="font-anton tracking-wider text-orange-600 text-sm block mb-3 uppercase">
             SIDE-BY-SIDE MATRIX
           </span>
-          <h2 className="font-anton text-5xl md:text-8xl uppercase leading-none tracking-tight">
+          <h2 className="font-anton text-5xl md:text-8xl uppercase leading-none tracking-tight text-slate-900">
             COMPARE BIKES
           </h2>
-          <p className="font-inter text-white/50 text-base md:text-lg max-w-xl mt-4 leading-relaxed">
-            Directly compare specifications, pricing, and ownership profiles. Our dashboard details specific performance advantages without declaring arbitrary winners.
+          <p className="font-inter text-slate-500 text-base md:text-lg max-w-xl mt-4 leading-relaxed">
+            Directly compare specifications, pricing, and ownership profiles. Detail specific performance advantages without declaring arbitrary winners.
           </p>
         </div>
 
@@ -91,42 +82,46 @@ export const CompareBikes: React.FC = () => {
             return (
               <div
                 key={slotIdx}
-                /* Translucent matrix slots to prevent box/panel look, adhering to luxury automotive aesthetics */
-                className="bg-black/30 backdrop-blur-md border border-white/10 p-6 flex flex-col justify-between relative rounded-none hover:border-[#E8FF00]/40 transition-colors duration-300"
+                className="bg-white border border-slate-200 p-6 flex flex-col justify-between relative rounded-2xl shadow-sm hover:border-orange-500/30 transition-colors duration-300"
               >
                 
                 {/* Selector Header */}
                 <div className="mb-6 space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="font-inter text-[10px] text-white/40 uppercase tracking-widest">
+                    <span className="font-inter text-[10px] text-slate-400 uppercase tracking-widest font-semibold">
                       COMPARISON SLOT {slotIdx + 1}
                     </span>
                     {bike && (
                       <button
                         onClick={() => handleSelectBike(slotIdx, '')}
-                        className="text-white/40 hover:text-white transition-colors"
+                        className="text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
                       >
                         <X className="h-3.5 w-3.5" />
                       </button>
                     )}
                   </div>
-                  <select
-                    value={bike?.id || ''}
-                    onChange={(e) => handleSelectBike(slotIdx, e.target.value)}
-                    className="w-full bg-black border border-white/15 px-3 py-2 text-xs font-anton text-white uppercase rounded-none focus:outline-none focus:border-[#E8FF00] appearance-none"
-                  >
-                    <option value="" className="bg-neutral-900">-- SELECT VEHICLE --</option>
-                    {MOTORCYCLES.map((m) => (
-                      <option
-                        key={m.id}
-                        value={m.id}
-                        disabled={selectedIds.includes(m.id) && m.id !== bike?.id}
-                        className="bg-neutral-900"
-                      >
-                        {m.name}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="relative">
+                    <select
+                      value={bike?.id || ''}
+                      onChange={(e) => handleSelectBike(slotIdx, e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-200 px-3 py-2 text-xs font-anton text-slate-800 uppercase rounded-xl focus:outline-none focus:border-orange-500 appearance-none cursor-pointer"
+                    >
+                      <option value="" className="bg-white">-- SELECT VEHICLE --</option>
+                      {MOTORCYCLES.map((m) => (
+                        <option
+                          key={m.id}
+                          value={m.id}
+                          disabled={selectedIds.includes(m.id) && m.id !== bike?.id}
+                          className="bg-white"
+                        >
+                          {m.name} ({m.brand})
+                        </option>
+                      ))}
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400">
+                      ▼
+                    </div>
+                  </div>
                 </div>
 
                 {bike ? (
@@ -134,7 +129,7 @@ export const CompareBikes: React.FC = () => {
                     
                     {/* Bike Snapshot */}
                     <div className="mb-6">
-                      <div className="h-36 w-full flex items-center justify-center relative mb-4">
+                      <div className="h-36 w-full flex items-center justify-center relative mb-4 bg-slate-50/50 rounded-xl">
                         <img
                           src={bike.heroImage}
                           alt={bike.name}
@@ -142,10 +137,10 @@ export const CompareBikes: React.FC = () => {
                         />
                       </div>
 
-                      <h3 className="font-anton text-2xl uppercase tracking-tight text-white">
+                      <h3 className="font-anton text-2xl uppercase tracking-tight text-slate-900 leading-snug">
                         {bike.name}
                       </h3>
-                      <p className="font-inter text-xs text-white/50 line-clamp-1 mt-0.5">
+                      <p className="font-inter text-xs text-slate-400 line-clamp-1 mt-0.5">
                         {bike.tagline}
                       </p>
                     </div>
@@ -155,82 +150,82 @@ export const CompareBikes: React.FC = () => {
                       {getHighlights(bike).map((hl, i) => (
                         <span
                           key={i}
-                          className="px-2 py-0.5 bg-black border border-[#E8FF00]/40 text-[#E8FF00] text-[9px] font-anton tracking-wider uppercase flex items-center gap-1"
+                          className="px-2 py-0.5 bg-orange-50 border border-orange-200 text-orange-700 text-[9px] font-anton tracking-wider uppercase flex items-center gap-1 rounded"
                         >
-                          <Sparkles className="h-2.5 w-2.5" /> {hl}
+                          <Sparkles className="h-2.5 w-2.5 text-orange-600" /> {hl}
                         </span>
                       ))}
                     </div>
 
                     {/* Specification Stack */}
-                    <div className="space-y-3.5 border-t border-white/10 pt-4 text-xs font-inter mb-6">
+                    <div className="space-y-3.5 border-t border-slate-100 pt-4 text-xs font-inter mb-6">
                       <div>
-                        <span className="text-[9px] text-white/40 uppercase tracking-widest block">PROPULSION TYPE</span>
-                        <span className="font-semibold text-white/90">{bike.category}</span>
+                        <span className="text-[9px] text-slate-400 uppercase tracking-widest block font-medium">PROPULSION TYPE</span>
+                        <span className="font-semibold text-slate-800">{bike.brand} • {bike.category}</span>
                       </div>
                       <div>
-                        <span className="text-[9px] text-white/40 uppercase tracking-widest block">ENGINE / MOTOR</span>
-                        <span className="font-semibold text-white/90 line-clamp-1">{bike.specs.engine.split('Liquid')[0]}</span>
+                        <span className="text-[9px] text-slate-400 uppercase tracking-widest block font-medium">ENGINE / MOTOR</span>
+                        <span className="font-semibold text-slate-800 line-clamp-1">{bike.specs.engine.split('Liquid')[0]}</span>
                       </div>
                       <div>
-                        <span className="text-[9px] text-white/40 uppercase tracking-widest block">POWER OUTPUT</span>
-                        <span className="font-semibold text-white/90">{bike.specs.power.split('@')[0]}</span>
+                        <span className="text-[9px] text-slate-400 uppercase tracking-widest block font-medium">POWER OUTPUT</span>
+                        <span className="font-semibold text-slate-800">{bike.specs.power.split('@')[0]}</span>
                       </div>
                       <div>
-                        <span className="text-[9px] text-white/40 uppercase tracking-widest block">MAX SPEED</span>
-                        <span className="font-semibold text-white/90">{bike.specs.topSpeed}</span>
+                        <span className="text-[9px] text-slate-400 uppercase tracking-widest block font-medium">MAX SPEED</span>
+                        <span className="font-semibold text-slate-800">{bike.specs.topSpeed}</span>
                       </div>
                       <div>
-                        <span className="text-[9px] text-white/40 uppercase tracking-widest block">REAL WORLD EFFICIENCY</span>
-                        <span className="font-semibold text-white/90">
+                        <span className="text-[9px] text-slate-400 uppercase tracking-widest block font-medium">REAL WORLD EFFICIENCY</span>
+                        <span className="font-semibold text-slate-800">
                           {bike.mileage.realWorld} {bike.category === 'Electric' ? 'km (Range)' : 'km/l (Petrol)'}
                         </span>
                       </div>
                       <div>
-                        <span className="text-[9px] text-white/40 uppercase tracking-widest block">SAFETY SCORE</span>
-                        <span className="font-semibold text-white/90">{bike.safetyRating}</span>
+                        <span className="text-[9px] text-slate-400 uppercase tracking-widest block font-medium">SAFETY SCORE</span>
+                        <span className="font-semibold text-slate-800">{bike.safetyRating}</span>
                       </div>
                       <div>
-                        <span className="text-[9px] text-white/40 uppercase tracking-widest block">EX-SHOWROOM PRICE</span>
-                        <span className="font-anton text-sm text-[#E8FF00] tracking-wider mt-0.5 block">
+                        <span className="text-[9px] text-slate-400 uppercase tracking-widest block font-medium">EX-SHOWROOM PRICE</span>
+                        <span className="font-anton text-base text-orange-600 tracking-wider mt-0.5 block">
                           ₹{new Intl.NumberFormat('en-IN').format(bike.price)}
                         </span>
                       </div>
                     </div>
 
                     {/* Features checklist (summary of dynamic matches) */}
-                    <div className="border-t border-white/5 pt-4 space-y-2 text-[10px] text-white/60">
+                    <div className="border-t border-slate-100 pt-4 space-y-2 text-[10px] text-slate-500">
                       <div className="flex items-center justify-between">
                         <span>Bi-directional Quickshifter</span>
-                        {bike.features.includes('Bi-directional Quick Shifter') ? (
-                          <Check className="h-3.5 w-3.5 text-success" />
+                        {bike.features.some(f => f.toLowerCase().includes('quick shifter') || f.toLowerCase().includes('quickshifter')) ? (
+                          <Check className="h-3.5 w-3.5 text-green-600" />
                         ) : (
-                          <X className="h-3.5 w-3.5 text-danger" />
+                          <X className="h-3.5 w-3.5 text-red-500" />
                         )}
                       </div>
                       <div className="flex items-center justify-between">
                         <span>Electronic Cruise Control</span>
-                        {bike.features.includes('Cruise Control') || bike.features.includes('Electronic Cruise Control') ? (
-                          <Check className="h-3.5 w-3.5 text-success" />
+                        {bike.features.some(f => f.toLowerCase().includes('cruise control')) ? (
+                          <Check className="h-3.5 w-3.5 text-green-600" />
                         ) : (
-                          <X className="h-3.5 w-3.5 text-danger" />
+                          <X className="h-3.5 w-3.5 text-red-500" />
                         )}
                       </div>
                       <div className="flex items-center justify-between">
                         <span>Integrated Bluetooth Nav</span>
-                        {bike.features.includes('Bluetooth Connectivity') || bike.features.includes('Bluetooth Call/Music Control') || bike.features.includes('Bluetooth Infotainment Engine') ? (
-                          <Check className="h-3.5 w-3.5 text-success" />
+                        {bike.features.some(f => f.toLowerCase().includes('bluetooth') || f.toLowerCase().includes('navigation')) ? (
+                          <Check className="h-3.5 w-3.5 text-green-600" />
                         ) : (
-                          <X className="h-3.5 w-3.5 text-danger" />
+                          <X className="h-3.5 w-3.5 text-red-500" />
                         )}
                       </div>
                     </div>
 
                   </div>
                 ) : (
-                  <div className="flex-1 flex flex-col items-center justify-center text-center p-8 border border-dashed border-white/10 bg-black/20">
-                    <GitCompare className="h-8 w-8 text-white/20 mb-3" />
-                    <p className="font-inter text-xs text-white/40 max-w-[150px]">
+                  <div className="flex-1 flex flex-col items-center justify-center text-center p-8 border border-dashed border-slate-200 bg-slate-50/50 rounded-xl min-h-[350px]">
+                    <GitCompare className="h-8 w-8 text-slate-300 mb-3" />
+                    <p className="font-inter text-xs text-slate-400 max-w-[150px] leading-relaxed">
                       Select a bike from the dropdown list to compare specifications
                     </p>
                   </div>
