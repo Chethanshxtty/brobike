@@ -138,7 +138,7 @@ export const MOTORCYCLES: Motorcycle[] = [
     category: 'Sport',
     ghostText: 'RESTLESS PLAY',
     themeColor: '#FF5C5C',
-    heroImage: 'https://bd.gaadicdn.com/processedimages/tvs/apache-rtr-310/640X309/apache-rtr-3101694086608.png',
+    heroImage: '/sport-bike.png',
     price: 242990,
     tagline: 'Restless play. Track-inspired styling and aggressive street presence.',
     description: 'An aggressive naked streetfighter loaded with segment-first technology including climate-controlled seats, dynamic stability control, and high cornering speeds.',
@@ -147,9 +147,9 @@ export const MOTORCYCLES: Motorcycle[] = [
     speedSpec: '150 km/h',
     safetyRating: '9.0 / 10',
     colors: [
-      { name: 'Fury Yellow', hex: '#FFD300', image: 'https://bd.gaadicdn.com/processedimages/tvs/apache-rtr-310/640X309/apache-rtr-3101694086608.png' },
-      { name: 'Arsenal Black', hex: '#1C1C1C', image: 'https://bd.gaadicdn.com/processedimages/tvs/apache-rtr-310/640X309/apache-rtr-3101694086608.png' },
-      { name: 'Steel Blue', hex: '#2B4A6F', image: 'https://bd.gaadicdn.com/processedimages/tvs/apache-rtr-310/640X309/apache-rtr-3101694086608.png' }
+      { name: 'Fury Yellow', hex: '#FFD300', image: '/sport-bike.png' },
+      { name: 'Arsenal Black', hex: '#1C1C1C', image: '/sport-bike.png' },
+      { name: 'Steel Blue', hex: '#2B4A6F', image: '/sport-bike.png' }
     ],
     accessories: [
       { id: 'ap-cg', name: 'Premium Frame Sliders', price: 3200, description: 'Crash protection structure' },
@@ -231,7 +231,7 @@ export const MOTORCYCLES: Motorcycle[] = [
     category: 'Adventure',
     ghostText: 'BUILT FOR ALL ROADS',
     themeColor: '#6BBF7A',
-    heroImage: 'https://bd.gaadicdn.com/processedimages/royal-enfield/himalayan-450/640X309/himalayan-4501700818274.png',
+    heroImage: '/adventure-bike.png',
     price: 285000,
     tagline: 'Built for all roads. Built for no roads.',
     description: 'Featuring the Sherpa 450 engine, this is Royal Enfield’s first liquid-cooled motorcycle. Purpose-built for rough tracks, high passes, and trans-continental expeditions.',
@@ -240,9 +240,9 @@ export const MOTORCYCLES: Motorcycle[] = [
     speedSpec: '151 km/h',
     safetyRating: '9.3 / 10',
     colors: [
-      { name: 'Kaza Brown', hex: '#8B7E74', image: 'https://bd.gaadicdn.com/processedimages/royal-enfield/himalayan-450/640X309/himalayan-4501700818274.png' },
-      { name: 'Slate Salt', hex: '#D2D2D2', image: 'https://bd.gaadicdn.com/processedimages/royal-enfield/himalayan-450/640X309/himalayan-4501700818274.png' },
-      { name: 'Hanle Black', hex: '#1E1E1E', image: 'https://bd.gaadicdn.com/processedimages/royal-enfield/himalayan-450/640X309/himalayan-4501700818274.png' }
+      { name: 'Kaza Brown', hex: '#8B7E74', image: '/adventure-bike.png' },
+      { name: 'Slate Salt', hex: '#D2D2D2', image: '/adventure-bike.png' },
+      { name: 'Hanle Black', hex: '#1E1E1E', image: '/adventure-bike.png' }
     ],
     accessories: [
       { id: 'him-tb', name: 'Aluminium Panniers (Set)', price: 24000, description: 'Rugged side luggage panniers' },
@@ -324,7 +324,7 @@ export const MOTORCYCLES: Motorcycle[] = [
     category: 'Electric',
     ghostText: 'AVIATION ON WHEELS',
     themeColor: '#6EB5FF',
-    heroImage: 'https://bd.gaadicdn.com/processedimages/ultraviolette/f77/640X309/f771694087114.png',
+    heroImage: '/electric-bike.png',
     price: 299000,
     tagline: 'Electric aviation on two wheels. Instant torque.',
     description: 'India’s premier electric sport bike featuring advanced 10-level regenerative braking, active console controls, and fighter-jet ergonomics.',
@@ -333,9 +333,9 @@ export const MOTORCYCLES: Motorcycle[] = [
     speedSpec: '155 km/h',
     safetyRating: '9.4 / 10',
     colors: [
-      { name: 'Lightning Silver', hex: '#D9D9D9', image: 'https://bd.gaadicdn.com/processedimages/ultraviolette/f77/640X309/f771694087114.png' },
-      { name: 'Laser Red', hex: '#FF003C', image: 'https://bd.gaadicdn.com/processedimages/ultraviolette/f77/640X309/f771694087114.png' },
-      { name: 'Shadow Black', hex: '#0F0F0F', image: 'https://bd.gaadicdn.com/processedimages/ultraviolette/f77/640X309/f771694087114.png' }
+      { name: 'Lightning Silver', hex: '#D9D9D9', image: '/electric-bike.png' },
+      { name: 'Laser Red', hex: '#FF003C', image: '/electric-bike.png' },
+      { name: 'Shadow Black', hex: '#0F0F0F', image: '/electric-bike.png' }
     ],
     accessories: [
       { id: 'f77-fc', name: 'Boost Fast Charger', price: 12500, description: 'Charges 0-80% in 1 hour' },
@@ -415,7 +415,7 @@ export const MOTORCYCLES: Motorcycle[] = [
     category: 'Premium',
     ghostText: 'THE BIGGEST PULSAR',
     themeColor: '#B07DFF',
-    heroImage: 'https://bd.gaadicdn.com/processedimages/bajaj/pulsar-ns-400/640X309/pulsar-ns-4001714736829.png',
+    heroImage: '/premium-bike.png',
     price: 185000,
     tagline: 'The biggest Pulsar yet. Naked brute torque and value.',
     description: 'Unmatched value proposal in the sub-400cc class, delivering pure roadster performance and premium features at an accessible entry price.',
@@ -424,9 +424,9 @@ export const MOTORCYCLES: Motorcycle[] = [
     speedSpec: '154 km/h',
     safetyRating: '8.8 / 10',
     colors: [
-      { name: 'Brooklyn Black', hex: '#1A1A1A', image: 'https://bd.gaadicdn.com/processedimages/bajaj/pulsar-ns-400/640X309/pulsar-ns-4001714736829.png' },
-      { name: 'Pewter Grey', hex: '#5E6065', image: 'https://bd.gaadicdn.com/processedimages/bajaj/pulsar-ns-400/640X309/pulsar-ns-4001714736829.png' },
-      { name: 'Pearl Metallic White', hex: '#F0F0F0', image: 'https://bd.gaadicdn.com/processedimages/bajaj/pulsar-ns-400/640X309/pulsar-ns-4001714736829.png' }
+      { name: 'Brooklyn Black', hex: '#1A1A1A', image: '/premium-bike.png' },
+      { name: 'Pewter Grey', hex: '#5E6065', image: '/premium-bike.png' },
+      { name: 'Pearl Metallic White', hex: '#F0F0F0', image: '/premium-bike.png' }
     ],
     accessories: [
       { id: 'ns-cg', name: 'Nylon Frame Sliders', price: 2200, description: 'Engine side guard panels' },
@@ -506,7 +506,7 @@ export const MOTORCYCLES: Motorcycle[] = [
     category: 'Sport',
     ghostText: 'THE LEGEND RETURNS',
     themeColor: '#FF9F1C',
-    heroImage: 'https://bd.gaadicdn.com/processedimages/hero/karizma-xmr/640X309/karizma-xmr1693309995.png',
+    heroImage: '/sport-bike.png',
     price: 179900,
     tagline: 'The legend returns. Dynamic performance and aerodynamic bodywork.',
     description: 'Hero MotoCorp’s flagship sports bike featuring a powerful DOHC liquid-cooled engine, slip-and-assist clutch, and modern aggressive styling.',
@@ -515,9 +515,9 @@ export const MOTORCYCLES: Motorcycle[] = [
     speedSpec: '143 km/h',
     safetyRating: '8.6 / 10',
     colors: [
-      { name: 'Iconic Yellow', hex: '#FFBC0A', image: 'https://bd.gaadicdn.com/processedimages/hero/karizma-xmr/640X309/karizma-xmr1693309995.png' },
-      { name: 'Turbo Red', hex: '#D62246', image: 'https://bd.gaadicdn.com/processedimages/hero/karizma-xmr/640X309/karizma-xmr1693309995.png' },
-      { name: 'Matte Phantom Black', hex: '#212529', image: 'https://bd.gaadicdn.com/processedimages/hero/karizma-xmr/640X309/karizma-xmr1693309995.png' }
+      { name: 'Iconic Yellow', hex: '#FFBC0A', image: '/sport-bike.png' },
+      { name: 'Turbo Red', hex: '#D62246', image: '/sport-bike.png' },
+      { name: 'Matte Phantom Black', hex: '#212529', image: '/sport-bike.png' }
     ],
     accessories: [
       { id: 'kz-cg', name: 'Slider Crash Protection', price: 2100, description: 'Engine side guard panels' },
@@ -596,7 +596,7 @@ export const MOTORCYCLES: Motorcycle[] = [
     category: 'Premium',
     ghostText: 'TIMELESS CLASSIC',
     themeColor: '#7A6B58',
-    heroImage: 'https://bd.gaadicdn.com/processedimages/royal-enfield/classic-350-2021/640X309/classic-350-20211725359751.png',
+    heroImage: '/premium-bike.png',
     price: 193080,
     tagline: 'Timeless icon. Unmistakable classic thump and vintage design.',
     description: 'The definitive retro-classic cruiser rebuilt on the modern J-series engine platform. Smooth power delivery, heavy flywheel thump, and historic design cues.',
@@ -605,9 +605,9 @@ export const MOTORCYCLES: Motorcycle[] = [
     speedSpec: '114 km/h',
     safetyRating: '8.7 / 10',
     colors: [
-      { name: 'Halcyon Green', hex: '#2F4F3F', image: 'https://bd.gaadicdn.com/processedimages/royal-enfield/classic-350-2021/640X309/classic-350-20211725359751.png' },
-      { name: 'Chrome Red', hex: '#8B0000', image: 'https://bd.gaadicdn.com/processedimages/royal-enfield/classic-350-2021/640X309/classic-350-20211725359751.png' },
-      { name: 'Gunmetal Grey', hex: '#696969', image: 'https://bd.gaadicdn.com/processedimages/royal-enfield/classic-350-2021/640X309/classic-350-20211725359751.png' }
+      { name: 'Halcyon Green', hex: '#2F4F3F', image: '/premium-bike.png' },
+      { name: 'Chrome Red', hex: '#8B0000', image: '/premium-bike.png' },
+      { name: 'Gunmetal Grey', hex: '#696969', image: '/premium-bike.png' }
     ],
     accessories: [
       { id: 're-ls', name: 'Touring Rider Seat', price: 3500, description: 'Dual density foam touring seat' },
@@ -686,7 +686,7 @@ export const MOTORCYCLES: Motorcycle[] = [
     category: 'Mileage',
     ghostText: 'METRO ROADSTER',
     themeColor: '#4A90E2',
-    heroImage: 'https://bd.gaadicdn.com/processedimages/royal-enfield/hunter-350/640X309/hunter-3501660043869.png',
+    heroImage: '/mileage-bike.png',
     price: 149900,
     tagline: 'Lightweight roadster. Urban agility and neo-retro layout.',
     description: 'An agile 350cc roadster built for tight city commutes. Features light handling, smaller wheels, lower seat height, and punchy J-series performance.',
@@ -695,9 +695,9 @@ export const MOTORCYCLES: Motorcycle[] = [
     speedSpec: '114 km/h',
     safetyRating: '8.4 / 10',
     colors: [
-      { name: 'Dapper Blue', hex: '#2A5C91', image: 'https://bd.gaadicdn.com/processedimages/royal-enfield/hunter-350/640X309/hunter-3501660043869.png' },
-      { name: 'Rebel Red', hex: '#C22C2C', image: 'https://bd.gaadicdn.com/processedimages/royal-enfield/hunter-350/640X309/hunter-3501660043869.png' },
-      { name: 'Dapper Ash', hex: '#63666A', image: 'https://bd.gaadicdn.com/processedimages/royal-enfield/hunter-350/640X309/hunter-3501660043869.png' }
+      { name: 'Dapper Blue', hex: '#2A5C91', image: '/mileage-bike.png' },
+      { name: 'Rebel Red', hex: '#C22C2C', image: '/mileage-bike.png' },
+      { name: 'Dapper Ash', hex: '#63666A', image: '/mileage-bike.png' }
     ],
     accessories: [
       { id: 're-hg', name: 'Compact Engine Guard', price: 2900, description: 'Black powder coated engine guard' },
@@ -776,7 +776,7 @@ export const MOTORCYCLES: Motorcycle[] = [
     category: 'Sport',
     ghostText: 'THE NAKED SPORT',
     themeColor: '#D33F49',
-    heroImage: 'https://bd.gaadicdn.com/processedimages/bajaj/pulsar-ns200/640X309/pulsar-ns2001678103328.png',
+    heroImage: '/sport-bike.png',
     price: 158270,
     tagline: 'Pure street fighter. Rev-happy perimeter frame performance.',
     description: 'The defining segment starter featuring a high-revving liquid-cooled 4V engine, perimeter frame, and sport suspension for aggressive handling.',
@@ -785,9 +785,9 @@ export const MOTORCYCLES: Motorcycle[] = [
     speedSpec: '136 km/h',
     safetyRating: '8.5 / 10',
     colors: [
-      { name: 'Cocktail Wine Red', hex: '#9E1B24', image: 'https://bd.gaadicdn.com/processedimages/bajaj/pulsar-ns200/640X309/pulsar-ns2001678103328.png' },
-      { name: 'Ebony Black', hex: '#1C1C1C', image: 'https://bd.gaadicdn.com/processedimages/bajaj/pulsar-ns200/640X309/pulsar-ns2001678103328.png' },
-      { name: 'Pewter Grey', hex: '#777B7E', image: 'https://bd.gaadicdn.com/processedimages/bajaj/pulsar-ns200/640X309/pulsar-ns2001678103328.png' }
+      { name: 'Cocktail Wine Red', hex: '#9E1B24', image: '/sport-bike.png' },
+      { name: 'Ebony Black', hex: '#1C1C1C', image: '/sport-bike.png' },
+      { name: 'Pewter Grey', hex: '#777B7E', image: '/sport-bike.png' }
     ],
     accessories: [
       { id: 'ns-cg200', name: 'Leg Guard Set', price: 1100, description: 'Steel tubes protect engine sides' },
@@ -866,7 +866,7 @@ export const MOTORCYCLES: Motorcycle[] = [
     category: 'Electric',
     ghostText: 'FUTURE CLASSIC',
     themeColor: '#F5B041',
-    heroImage: 'https://bd.gaadicdn.com/processedimages/bajaj/chetak/640X309/chetak1704456721.png',
+    heroImage: '/electric-bike.png',
     price: 115000,
     tagline: 'Timeless styling. All-metal body steel structure.',
     description: 'Bajaj’s iconic legacy reinvented for the electric era. Elegant sheet metal body, retro silhouette, smart phone pairing, and 126 km certified range.',
@@ -875,9 +875,9 @@ export const MOTORCYCLES: Motorcycle[] = [
     speedSpec: '73 km/h',
     safetyRating: '8.8 / 10',
     colors: [
-      { name: 'Brooklyn Black', hex: '#1C1C1C', image: 'https://bd.gaadicdn.com/processedimages/bajaj/chetak/640X309/chetak1704456721.png' },
-      { name: 'Indigo Metallic', hex: '#1B2A4A', image: 'https://bd.gaadicdn.com/processedimages/bajaj/chetak/640X309/chetak1704456721.png' },
-      { name: 'Hazelnut Cream', hex: '#DFD5C6', image: 'https://bd.gaadicdn.com/processedimages/bajaj/chetak/640X309/chetak1704456721.png' }
+      { name: 'Brooklyn Black', hex: '#1C1C1C', image: '/electric-bike.png' },
+      { name: 'Indigo Metallic', hex: '#1B2A4A', image: '/electric-bike.png' },
+      { name: 'Hazelnut Cream', hex: '#DFD5C6', image: '/electric-bike.png' }
     ],
     accessories: [
       { id: 'ch-fc', name: 'Smart Fast Charger', price: 9500, description: 'Charges 0-80% in 3 hours' },
@@ -955,7 +955,7 @@ export const MOTORCYCLES: Motorcycle[] = [
     category: 'Mileage',
     ghostText: 'THE SMART COMMUTER',
     themeColor: '#F4D03F',
-    heroImage: 'https://bd.gaadicdn.com/processedimages/tvs/raider/640X309/raider1694086576.png',
+    heroImage: '/mileage-bike.png',
     price: 95219,
     tagline: 'Wicked Commuter. High efficiency and advanced digital dashboard.',
     description: 'Award-winning commuter bike featuring first-in-segment TFT screen with voice commands, high fuel economy, sporty layout, and dynamic handling.',
@@ -964,9 +964,9 @@ export const MOTORCYCLES: Motorcycle[] = [
     speedSpec: '99 km/h',
     safetyRating: '8.2 / 10',
     colors: [
-      { name: 'Fiery Yellow', hex: '#FFBC00', image: 'https://bd.gaadicdn.com/processedimages/tvs/raider/640X309/raider1694086576.png' },
-      { name: 'Wicked Black', hex: '#1C1C1C', image: 'https://bd.gaadicdn.com/processedimages/tvs/raider/640X309/raider1694086576.png' },
-      { name: 'Striking Red', hex: '#E74C3C', image: 'https://bd.gaadicdn.com/processedimages/tvs/raider/640X309/raider1694086576.png' }
+      { name: 'Fiery Yellow', hex: '#FFBC00', image: '/mileage-bike.png' },
+      { name: 'Wicked Black', hex: '#1C1C1C', image: '/mileage-bike.png' },
+      { name: 'Striking Red', hex: '#E74C3C', image: '/mileage-bike.png' }
     ],
     accessories: [
       { id: 'tv-cg', name: 'Engine Belly Pan', price: 950, description: 'Underbelly protection panel' },
@@ -1045,7 +1045,7 @@ export const MOTORCYCLES: Motorcycle[] = [
     category: 'Electric',
     ghostText: 'CONNECTED MOBILITY',
     themeColor: '#70D6FF',
-    heroImage: 'https://bd.gaadicdn.com/processedimages/tvs/iqube/640X309/iqube1653381665.png',
+    heroImage: '/electric-bike.png',
     price: 138000,
     tagline: 'Smart scooter. Comfortable family layout and connected app ecosystem.',
     description: 'TVS’s practical electric scooter designed for families. Generous floorboard space, large digital console, and robust real world range.',
@@ -1054,9 +1054,9 @@ export const MOTORCYCLES: Motorcycle[] = [
     speedSpec: '78 km/h',
     safetyRating: '8.6 / 10',
     colors: [
-      { name: 'Mercury Grey', hex: '#B2B5B2', image: 'https://bd.gaadicdn.com/processedimages/tvs/iqube/640X309/iqube1653381665.png' },
-      { name: 'Mint Blue', hex: '#A8DADC', image: 'https://bd.gaadicdn.com/processedimages/tvs/iqube/640X309/iqube1653381665.png' },
-      { name: 'Lucid Yellow', hex: '#FDF0D5', image: 'https://bd.gaadicdn.com/processedimages/tvs/iqube/640X309/iqube1653381665.png' }
+      { name: 'Mercury Grey', hex: '#B2B5B2', image: '/electric-bike.png' },
+      { name: 'Mint Blue', hex: '#A8DADC', image: '/electric-bike.png' },
+      { name: 'Lucid Yellow', hex: '#FDF0D5', image: '/electric-bike.png' }
     ],
     accessories: [
       { id: 'iq-fc', name: 'TVS iQube Wall Charger', price: 8500, description: 'Home installation wallbox' },
@@ -1134,7 +1134,7 @@ export const MOTORCYCLES: Motorcycle[] = [
     category: 'Adventure',
     ghostText: 'ADVENTURE ANYWHERE',
     themeColor: '#2ECC71',
-    heroImage: 'https://bd.gaadicdn.com/processedimages/hero/xpulse-200/640X309/xpulse-2001693910300.png',
+    heroImage: '/adventure-bike.png',
     price: 145780,
     tagline: 'Lightweight off-roader. High travel suspension and spoked wheels.',
     description: 'accessible adventure tourer. Features long-travel front suspension, high ground clearance, dual-purpose block tyres, and spoked wheels.',
@@ -1143,9 +1143,9 @@ export const MOTORCYCLES: Motorcycle[] = [
     speedSpec: '115 km/h',
     safetyRating: '8.9 / 10',
     colors: [
-      { name: 'Techno Blue', hex: '#1B4F72', image: 'https://bd.gaadicdn.com/processedimages/hero/xpulse-200/640X309/xpulse-2001693910300.png' },
-      { name: 'Sports Red', hex: '#C0392B', image: 'https://bd.gaadicdn.com/processedimages/hero/xpulse-200/640X309/xpulse-2001693910300.png' },
-      { name: 'Matte Nexus Blue', hex: '#566573', image: 'https://bd.gaadicdn.com/processedimages/hero/xpulse-200/640X309/xpulse-2001693910300.png' }
+      { name: 'Techno Blue', hex: '#1B4F72', image: '/adventure-bike.png' },
+      { name: 'Sports Red', hex: '#C0392B', image: '/adventure-bike.png' },
+      { name: 'Matte Nexus Blue', hex: '#566573', image: '/adventure-bike.png' }
     ],
     accessories: [
       { id: 'xp-bp', name: 'Rally Sump Guard', price: 1800, description: 'Aluminium engine bash plate' },
@@ -1224,7 +1224,7 @@ export const MOTORCYCLES: Motorcycle[] = [
     category: 'Electric',
     ghostText: 'HIGH SPEED EV',
     themeColor: '#9B5DE5',
-    heroImage: 'https://bd.gaadicdn.com/processedimages/ola-electric/s1-pro/640X309/s1-pro1694086887.png',
+    heroImage: '/electric-bike.png',
     price: 129999,
     tagline: 'Premium tech cruiser. Instant performance and huge touchscreen console.',
     description: 'Ola’s high output electric scooter. Features cruise control, keyless digital unlock, internal music speakers, and an impressive range.',
@@ -1233,9 +1233,9 @@ export const MOTORCYCLES: Motorcycle[] = [
     speedSpec: '120 km/h',
     safetyRating: '9.0 / 10',
     colors: [
-      { name: 'Stellar Blue', hex: '#2A9D8F', image: 'https://bd.gaadicdn.com/processedimages/ola-electric/s1-pro/640X309/s1-pro1694086887.png' },
-      { name: 'Midnight Blue', hex: '#1D3557', image: 'https://bd.gaadicdn.com/processedimages/ola-electric/s1-pro/640X309/s1-pro1694086887.png' },
-      { name: 'Matt Black', hex: '#1C1C1C', image: 'https://bd.gaadicdn.com/processedimages/ola-electric/s1-pro/640X309/s1-pro1694086887.png' }
+      { name: 'Stellar Blue', hex: '#2A9D8F', image: '/electric-bike.png' },
+      { name: 'Midnight Blue', hex: '#1D3557', image: '/electric-bike.png' },
+      { name: 'Matt Black', hex: '#1C1C1C', image: '/electric-bike.png' }
     ],
     accessories: [
       { id: 'ol-sc', name: 'Buddy Step Guard', price: 1990, description: 'Stainless steel side pillion footrest' },
@@ -1313,7 +1313,7 @@ export const MOTORCYCLES: Motorcycle[] = [
     category: 'Electric',
     ghostText: 'THE SMART ATHLETE',
     themeColor: '#27AE60',
-    heroImage: 'https://bd.gaadicdn.com/processedimages/ather-energy/450x/640X309/450x1694086968.png',
+    heroImage: '/electric-bike.png',
     price: 140600,
     tagline: 'Sports electric scooter. Ultra sharp handling and warp speed acceleration.',
     description: 'India’s benchmark sports scooter featuring an aluminum spaceframe, Google maps casting on a color touchscreen, and aggressive agile handling.',
@@ -1322,9 +1322,9 @@ export const MOTORCYCLES: Motorcycle[] = [
     speedSpec: '90 km/h',
     safetyRating: '9.2 / 10',
     colors: [
-      { name: 'Space Grey', hex: '#4A5568', image: 'https://bd.gaadicdn.com/processedimages/ather-energy/450x/640X309/450x1694086968.png' },
-      { name: 'Salt White', hex: '#F7FAFC', image: 'https://bd.gaadicdn.com/processedimages/ather-energy/450x/640X309/450x1694086968.png' },
-      { name: 'Still Green', hex: '#1C3A27', image: 'https://bd.gaadicdn.com/processedimages/ather-energy/450x/640X309/450x1694086968.png' }
+      { name: 'Space Grey', hex: '#4A5568', image: '/electric-bike.png' },
+      { name: 'Salt White', hex: '#F7FAFC', image: '/electric-bike.png' },
+      { name: 'Still Green', hex: '#1C3A27', image: '/electric-bike.png' }
     ],
     accessories: [
       { id: 'at-tp', name: 'Tire Pressure Monitor System', price: 4999, description: 'Sensors sync with dashboard screen' },
