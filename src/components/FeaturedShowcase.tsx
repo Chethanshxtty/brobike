@@ -1,14 +1,15 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { type Motorcycle, MOTORCYCLES } from '../data/bikes';
-import { Compass, Eye, ShieldCheck, Zap } from 'lucide-react';
+import { Compass, Eye, ShieldCheck, Zap, GitCompare } from 'lucide-react';
 import { handleImageError } from '../utils/imageFallback';
 
 interface FeaturedShowcaseProps {
   onSelectBike: (bike: Motorcycle) => void;
+  onAddToCompare?: (bikeId: string) => void;
 }
 
-export const FeaturedShowcase: React.FC<FeaturedShowcaseProps> = ({ onSelectBike }) => {
+export const FeaturedShowcase: React.FC<FeaturedShowcaseProps> = ({ onSelectBike, onAddToCompare }) => {
   // Select top 3 distinct bikes to feature in the Showcase section
   const featuredBikes = MOTORCYCLES.slice(0, 3);
 
@@ -106,16 +107,23 @@ export const FeaturedShowcase: React.FC<FeaturedShowcaseProps> = ({ onSelectBike
                     </div>
                   </div>
 
-                  <div className="flex flex-col sm:flex-row gap-4 pt-2">
+                  <div className="flex flex-wrap gap-4 pt-2">
                     <button
                       onClick={() => onSelectBike(bike)}
-                      className="flex-1 sm:flex-none px-8 py-3.5 bg-orange-600 text-white font-anton text-base uppercase rounded-xl hover:bg-slate-900 transition-colors duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-sm shadow-orange-500/10"
+                      className="px-6 py-3.5 bg-orange-600 text-white font-anton text-sm uppercase rounded-xl hover:bg-slate-900 transition-colors duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-sm shadow-orange-500/10"
                     >
-                      <Eye className="h-4 w-4" /> VIEW SPEC DETAILS
+                      <Eye className="h-4 w-4" /> VIEW DETAILS
                     </button>
                     
-                    <div className="flex items-center">
-                      <span className="font-inter text-xs text-slate-400 mr-2 uppercase">STARTING FROM</span>
+                    <button
+                      onClick={() => onAddToCompare && onAddToCompare(bike.id)}
+                      className="px-6 py-3.5 bg-transparent border border-slate-200 text-slate-700 font-anton text-sm uppercase rounded-xl hover:bg-slate-100 hover:text-slate-900 transition-colors duration-200 flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      <GitCompare className="h-4 w-4" /> COMPARE
+                    </button>
+
+                    <div className="flex items-center ml-auto">
+                      <span className="font-inter text-[10px] text-slate-400 mr-2 block font-semibold uppercase">STARTING AT</span>
                       <span className="font-anton text-xl text-slate-800">
                         {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(bike.price)}
                       </span>

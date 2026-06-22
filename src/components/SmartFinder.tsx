@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { type Motorcycle, MOTORCYCLES } from '../data/bikes';
-import { Eye, Landmark, Compass, Award } from 'lucide-react';
+import { Eye, Landmark, Compass, Award, GitCompare } from 'lucide-react';
 import { handleImageError } from '../utils/imageFallback';
 
 interface SmartFinderProps {
   onSelectBike: (bike: Motorcycle) => void;
+  onAddToCompare?: (bikeId: string) => void;
 }
 
 const BUDGET_PRESETS = [
@@ -27,7 +28,7 @@ const INDIAN_COMPANIES = [
   'Ultraviolette'
 ];
 
-export const SmartFinder: React.FC<SmartFinderProps> = ({ onSelectBike }) => {
+export const SmartFinder: React.FC<SmartFinderProps> = ({ onSelectBike, onAddToCompare }) => {
   const [budgetLimit, setBudgetLimit] = useState<number>(5.0); // Defaults to 5.0 Lakh (Show All)
   const [customInput, setCustomInput] = useState<string>('');
   const [brandFilterMode, setBrandFilterMode] = useState<'all' | 'custom'>('all');
@@ -422,12 +423,21 @@ export const SmartFinder: React.FC<SmartFinderProps> = ({ onSelectBike }) => {
                           </span>
                         </div>
                         
-                        <button
-                          onClick={() => onSelectBike(bike)}
-                          className="px-4 py-2 bg-slate-900 text-white font-anton text-xs uppercase rounded-lg hover:bg-orange-600 hover:shadow-sm transition-all duration-200 flex items-center gap-1.5 cursor-pointer"
-                        >
-                          <Eye className="h-3.5 w-3.5" /> Details
-                        </button>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => onAddToCompare && onAddToCompare(bike.id)}
+                            className="p-2 border border-slate-200 text-slate-500 hover:text-slate-800 hover:border-slate-350 transition-colors rounded-lg flex items-center justify-center cursor-pointer animate-none"
+                            title="Add to Compare"
+                          >
+                            <GitCompare className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={() => onSelectBike(bike)}
+                            className="px-4 py-2 bg-slate-900 text-white font-anton text-xs uppercase rounded-lg hover:bg-orange-600 hover:shadow-sm transition-all duration-200 flex items-center gap-1.5 cursor-pointer"
+                          >
+                            <Eye className="h-3.5 w-3.5" /> Details
+                          </button>
+                        </div>
                       </div>
                     </motion.div>
                   );

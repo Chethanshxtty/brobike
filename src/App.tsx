@@ -18,6 +18,12 @@ function App() {
   const [selectedBike, setSelectedBike] = useState<Motorcycle | null>(null);
   const [savedIds, setSavedIds] = useState<string[]>(['apache-310', 'pulsar-ns400']); // Pre-bookmark 2 by default
   const [showroomPreset, setShowroomPreset] = useState<string>('');
+  const [compareIds, setCompareIds] = useState<string[]>([
+    MOTORCYCLES[0].id,
+    MOTORCYCLES[1].id,
+    MOTORCYCLES[2].id,
+    ''
+  ]);
 
   // Refs for section scrolling
   const featuredRef = useRef<HTMLDivElement>(null);
@@ -44,6 +50,22 @@ function App() {
     setShowroomPreset(showroomName);
     const defaultBike = selectedBike || MOTORCYCLES[0];
     setSelectedBike(defaultBike);
+  };
+
+  const handleAddToCompare = (bikeId: string) => {
+    if (compareIds.includes(bikeId)) {
+      scrollToSection(compareRef);
+      return;
+    }
+    const emptyIndex = compareIds.indexOf('');
+    const nextIds = [...compareIds];
+    if (emptyIndex !== -1) {
+      nextIds[emptyIndex] = bikeId;
+    } else {
+      nextIds[3] = bikeId;
+    }
+    setCompareIds(nextIds);
+    scrollToSection(compareRef);
   };
 
   const navItems = [
@@ -96,23 +118,36 @@ function App() {
 
       {/* Smart Bike Finder (Budget & Brand Selection) */}
       <div ref={finderRef}>
-        <SmartFinder onSelectBike={(bike) => {
-          setShowroomPreset('');
-          setSelectedBike(bike);
-        }} />
+        <SmartFinder 
+          onSelectBike={(bike) => {
+            setShowroomPreset('');
+            setSelectedBike(bike);
+          }} 
+          onAddToCompare={handleAddToCompare}
+        />
       </div>
 
       {/* Featured Bikes Showcase */}
       <div ref={featuredRef}>
-        <FeaturedShowcase onSelectBike={(bike) => {
-          setShowroomPreset('');
-          setSelectedBike(bike);
-        }} />
+        <FeaturedShowcase 
+          onSelectBike={(bike) => {
+            setShowroomPreset('');
+            setSelectedBike(bike);
+          }} 
+          onAddToCompare={handleAddToCompare}
+        />
       </div>
 
       {/* Compare Bikes */}
       <div ref={compareRef}>
-        <CompareBikes />
+        <CompareBikes 
+          selectedIds={compareIds}
+          onSelectBike={(slotIndex, bikeId) => {
+            const nextIds = [...compareIds];
+            nextIds[slotIndex] = bikeId;
+            setCompareIds(nextIds);
+          }}
+        />
       </div>
 
       {/* Upcoming Bikes */}

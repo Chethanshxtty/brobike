@@ -1,21 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { MOTORCYCLES, type Motorcycle } from '../data/bikes';
 import { GitCompare, Sparkles, Check, X } from 'lucide-react';
 import { handleImageError } from '../utils/imageFallback';
 
-export const CompareBikes: React.FC = () => {
-  // Pre-load slots with the first three bikes by default, leaving the fourth empty
-  const [selectedIds, setSelectedIds] = useState<string[]>([
-    MOTORCYCLES[0].id,
-    MOTORCYCLES[1].id,
-    MOTORCYCLES[2].id,
-    ''
-  ]);
+interface CompareBikesProps {
+  selectedIds: string[];
+  onSelectBike: (slotIndex: number, bikeId: string) => void;
+}
 
+export const CompareBikes: React.FC<CompareBikesProps> = ({ selectedIds, onSelectBike }) => {
   const handleSelectBike = (slotIndex: number, bikeId: string) => {
-    const nextIds = [...selectedIds];
-    nextIds[slotIndex] = bikeId;
-    setSelectedIds(nextIds);
+    onSelectBike(slotIndex, bikeId);
   };
 
   const getComparedBikes = () => {
