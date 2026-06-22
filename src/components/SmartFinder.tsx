@@ -32,6 +32,7 @@ export const SmartFinder: React.FC<SmartFinderProps> = ({ onSelectBike }) => {
   const [customInput, setCustomInput] = useState<string>('');
   const [brandFilterMode, setBrandFilterMode] = useState<'all' | 'custom'>('all');
   const [selectedBrand, setSelectedBrand] = useState<string>('Royal Enfield');
+  const [categoryFilter, setCategoryFilter] = useState<string>('All');
 
   // Derive the active budget limit in Rupees
   const activeBudget = budgetLimit >= 5.0
@@ -70,6 +71,7 @@ export const SmartFinder: React.FC<SmartFinderProps> = ({ onSelectBike }) => {
     setCustomInput('');
     setBrandFilterMode('all');
     setSelectedBrand('Royal Enfield');
+    setCategoryFilter('All');
   };
 
   // Filter only Indian company bikes matching budget and brand selections
@@ -81,6 +83,11 @@ export const SmartFinder: React.FC<SmartFinderProps> = ({ onSelectBike }) => {
 
     // 2. Budget check (comparing ex-showroom base price)
     if (bike.price > activeBudget) {
+      return false;
+    }
+
+    // 3. Category check
+    if (categoryFilter !== 'All' && bike.category !== categoryFilter) {
       return false;
     }
 
@@ -286,6 +293,28 @@ export const SmartFinder: React.FC<SmartFinderProps> = ({ onSelectBike }) => {
             </AnimatePresence>
           </div>
 
+          {/* Row 3: Category Filters */}
+          <div className="space-y-4 pt-6 border-t border-slate-100">
+            <label className="font-anton text-xs tracking-wider uppercase text-slate-500 block">
+              3. CHOOSE CATEGORY
+            </label>
+            <div className="flex flex-wrap gap-2.5">
+              {['All', 'Sport', 'Adventure', 'Electric', 'Premium', 'Mileage'].map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setCategoryFilter(cat)}
+                  className={`px-4 py-2.5 text-xs font-anton uppercase border rounded-xl transition-all duration-200 cursor-pointer ${
+                    categoryFilter === cat
+                      ? 'bg-orange-600 border-orange-600 text-white shadow-sm'
+                      : 'bg-white border-slate-200 text-slate-600 hover:border-slate-355 hover:bg-slate-50'
+                  }`}
+                >
+                  {cat === 'All' ? '🌐 All Categories' : cat}
+                </button>
+              ))}
+            </div>
+          </div>
+
         </div>
 
         {/* Results Deck */}
@@ -294,7 +323,7 @@ export const SmartFinder: React.FC<SmartFinderProps> = ({ onSelectBike }) => {
             <h3 className="font-anton text-xs tracking-widest text-slate-400 uppercase">
               MATCHING MACHINES ({filteredBikes.length})
             </h3>
-            {(brandFilterMode !== 'all' || budgetLimit < 5.0) && (
+            {(brandFilterMode !== 'all' || budgetLimit < 5.0 || categoryFilter !== 'All') && (
               <button
                 onClick={clearFilters}
                 className="text-xs font-anton text-orange-600 hover:underline uppercase cursor-pointer"
