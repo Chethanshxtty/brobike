@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Sparkles, User, ShieldAlert, BadgeCheck, Wrench } from 'lucide-react';
+import { Send, Sparkles, User, ShieldAlert, BadgeCheck, Wrench, Trash2 } from 'lucide-react';
 import { MOTORCYCLES, type Motorcycle } from '../data/bikes';
 
 let messageCounter = 0;
@@ -169,6 +169,16 @@ export const BroAI: React.FC<BroAIProps> = ({ onSelectBike }) => {
     }, 1500);
   };
 
+  const handleResetChat = () => {
+    setMessages([
+      {
+        id: 'welcome',
+        sender: 'ai',
+        text: "Welcome to BRO AI. Tell me what you're looking for. Type your budget, desired mileage, style, or daily routine, and I will recommend your perfect match."
+      }
+    ]);
+  };
+
   return (
     <section className="min-h-screen bg-[#080808] text-white flex flex-col items-center justify-center py-20 px-4 md:px-12 border-t border-white/10 relative">
       <div className="w-full max-w-5xl flex flex-col md:flex-row gap-8 items-stretch h-[85vh]">
@@ -213,6 +223,15 @@ export const BroAI: React.FC<BroAIProps> = ({ onSelectBike }) => {
               <div className="h-2.5 w-2.5 rounded-full bg-[#E8FF00] animate-pulse" />
               <span className="font-anton text-sm tracking-widest text-white/90">BRO_AI_ASSISTANT v1.2</span>
             </div>
+            {messages.length > 1 && (
+              <button
+                onClick={handleResetChat}
+                className="flex items-center gap-1.5 text-[10px] font-anton text-white/50 hover:text-[#E8FF00] transition-colors uppercase tracking-wider cursor-pointer"
+                title="Reset Conversation"
+              >
+                <Trash2 className="h-3.5 w-3.5" /> Clear Chat
+              </button>
+            )}
           </div>
 
           {/* Messages Feed */}
