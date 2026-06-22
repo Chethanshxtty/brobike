@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { type Motorcycle, SHOWROOMS } from '../data/bikes';
-import { X, Heart, Calculator, Award, TrendingDown, Smile } from 'lucide-react';
+import { X, Heart, Calculator, Award, TrendingDown, Smile, Copy, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { handleImageError } from '../utils/imageFallback';
 
@@ -44,6 +44,13 @@ export const BikeDetails: React.FC<BikeDetailsProps> = ({
   const [bookingTime, setBookingTime] = useState('11:00 AM');
   const [bookingSubmitted, setBookingSubmitted] = useState(false);
   const [bookingCode, setBookingCode] = useState('');
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyCode = () => {
+    navigator.clipboard.writeText(bookingCode);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   // Close details modal on Escape key press
   useEffect(() => {
@@ -749,12 +756,30 @@ export const BikeDetails: React.FC<BikeDetailsProps> = ({
                   Your reservation is confirmed at **{bookingShowroom}** on **{bookingDate}** around **{bookingTime}**. 
                   Verification PIN: <span className="font-anton text-orange-600">{bookingCode}</span>. Bring your license!
                 </p>
-                <button
-                  onClick={() => setBookingSubmitted(false)}
-                  className="font-anton text-[10px] uppercase underline text-slate-500 hover:text-orange-600 cursor-pointer"
-                >
-                  Book another test
-                </button>
+                <div className="flex justify-center pt-1">
+                  <button
+                    onClick={handleCopyCode}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-green-200 rounded-lg text-[10px] font-anton tracking-wider text-green-700 uppercase hover:bg-green-100/50 transition-all cursor-pointer shadow-sm"
+                  >
+                    {copied ? (
+                      <>
+                        <Check className="h-3 w-3 text-green-600" /> COPIED!
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-3 w-3 text-green-500" /> COPY PIN CODE
+                      </>
+                    )}
+                  </button>
+                </div>
+                <div className="pt-2">
+                  <button
+                    onClick={() => setBookingSubmitted(false)}
+                    className="font-anton text-[10px] uppercase underline text-slate-500 hover:text-orange-600 cursor-pointer"
+                  >
+                    Book another test
+                  </button>
+                </div>
               </motion.div>
             ) : (
               <div className="bg-white border border-slate-200 p-5 space-y-4 rounded-2xl shadow-sm">
