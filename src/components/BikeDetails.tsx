@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { type Motorcycle, SHOWROOMS } from '../data/bikes';
 import { X, Heart, Calculator, Award, TrendingDown, Smile } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -44,6 +44,17 @@ export const BikeDetails: React.FC<BikeDetailsProps> = ({
   const [bookingTime, setBookingTime] = useState('11:00 AM');
   const [bookingSubmitted, setBookingSubmitted] = useState(false);
   const [bookingCode, setBookingCode] = useState('');
+
+  // Close details modal on Escape key press
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
 
   const handlePincodeSubmit = (e: React.FormEvent) => {
     e.preventDefault();
