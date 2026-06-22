@@ -46,23 +46,38 @@ function App() {
     setSelectedBike(defaultBike);
   };
 
+  const navItems = [
+    { label: 'Fleet', icon: Compass },
+    { label: 'Finder', icon: Sparkles },
+    { label: 'Compare', icon: GitCompare },
+    { label: 'Upcoming', icon: Calendar },
+    { label: 'Retail', icon: Landmark },
+    { label: 'Garage', icon: Bookmark, iconColor: 'text-orange-600' }
+  ];
+
+  const handleNavClick = (label: string) => {
+    let targetRef;
+    switch (label) {
+      case 'Fleet': targetRef = featuredRef; break;
+      case 'Finder': targetRef = finderRef; break;
+      case 'Compare': targetRef = compareRef; break;
+      case 'Upcoming': targetRef = upcomingRef; break;
+      case 'Retail': targetRef = showroomRef; break;
+      case 'Garage': targetRef = garageRef; break;
+      default: return;
+    }
+    scrollToSection(targetRef);
+  };
 
   return (
     <div className="relative bg-slate-50 text-slate-900 min-h-screen font-inter selection:bg-orange-500 selection:text-white">
       
       {/* Dynamic Floating Quick Navigation Deck (Light Glassmorphism Mode) */}
       <nav className="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col gap-4 bg-white/70 border border-slate-200 p-2.5 backdrop-blur-md rounded-2xl shadow-lg">
-        {[
-          { label: 'Fleet', icon: Compass, action: () => scrollToSection(featuredRef) },
-          { label: 'Finder', icon: Sparkles, action: () => scrollToSection(finderRef) },
-          { label: 'Compare', icon: GitCompare, action: () => scrollToSection(compareRef) },
-          { label: 'Upcoming', icon: Calendar, action: () => scrollToSection(upcomingRef) },
-          { label: 'Retail', icon: Landmark, action: () => scrollToSection(showroomRef) },
-          { label: 'Garage', icon: Bookmark, iconColor: 'text-orange-600', action: () => scrollToSection(garageRef) }
-        ].map((item, idx) => (
+        {navItems.map((item, idx) => (
           <button
             key={idx}
-            onClick={item.action}
+            onClick={() => handleNavClick(item.label)}
             className="group relative p-2 bg-transparent text-slate-500 hover:text-orange-600 hover:bg-slate-100/50 rounded-xl transition-all flex items-center justify-center"
             title={item.label}
           >
@@ -133,6 +148,7 @@ function App() {
             className="fixed inset-0 z-50"
           >
             <BikeDetails 
+              key={selectedBike.id}
               bike={selectedBike}
               isSaved={savedIds.includes(selectedBike.id)}
               onToggleSave={handleToggleSave}

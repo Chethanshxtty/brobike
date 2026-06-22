@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { type Motorcycle, SHOWROOMS } from '../data/bikes';
 import { X, Heart, Calculator, Award, TrendingDown, Smile } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { handleImageError } from '../utils/imageFallback';
 
 interface BikeDetailsProps {
   bike: Motorcycle;
@@ -28,7 +29,7 @@ export const BikeDetails: React.FC<BikeDetailsProps> = ({
   const [showPincodeInput, setShowPincodeInput] = useState(false);
 
   // EMI Calculator Inputs
-  const [downPayment, setDownPayment] = useState(50000);
+  const [downPayment, setDownPayment] = useState(() => Math.round(bike.price * 0.2));
   const [loanDuration, setLoanDuration] = useState(36); // Months
   const [interestRate, setInterestRate] = useState(9.5); // %
 
@@ -43,16 +44,6 @@ export const BikeDetails: React.FC<BikeDetailsProps> = ({
   const [bookingTime, setBookingTime] = useState('11:00 AM');
   const [bookingSubmitted, setBookingSubmitted] = useState(false);
   const [bookingCode, setBookingCode] = useState('');
-
-  // Synchronize initial values if bike changes
-  useEffect(() => {
-    setSelectedColor(bike.colors[0]);
-    setSelectedAccessories([]);
-    setDownPayment(Math.round(bike.price * 0.2)); // 20% down default
-    if (initialShowroomPreset) {
-      setBookingShowroom(initialShowroomPreset);
-    }
-  }, [bike, initialShowroomPreset]);
 
   const handlePincodeSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -161,8 +152,9 @@ export const BikeDetails: React.FC<BikeDetailsProps> = ({
             />
             
             <img
-              src={bike.heroImage}
+              src={selectedColor.image || bike.heroImage}
               alt={bike.name}
+              onError={(e) => handleImageError(e, bike.category)}
               className="max-h-[35vh] object-contain relative z-10 transform group-hover:scale-103 transition-transform duration-700"
             />
           </div>
