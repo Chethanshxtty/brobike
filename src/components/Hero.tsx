@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MOTORCYCLES } from '../data/bikes';
+import { handleImageError } from '../utils/imageFallback';
 
 interface HeroProps {
   onDiscoverClick: () => void;
@@ -72,6 +73,7 @@ export const Hero: React.FC<HeroProps> = ({ onDiscoverClick }) => {
               exit={{ scale: 1.15, y: -30, opacity: 0, filter: 'blur(10px)' }}
               transition={{ duration: 0.65, ease: [0.4, 0, 0.2, 1] }}
               onClick={handleNextBike}
+              onError={(e) => handleImageError(e, activeBike.category)}
               className="max-h-[50vh] md:max-h-[52vh] object-contain cursor-pointer transition-transform duration-500 hover:scale-[1.03] select-none pointer-events-auto"
             />
           </AnimatePresence>

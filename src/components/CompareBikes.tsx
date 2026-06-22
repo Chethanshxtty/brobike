@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MOTORCYCLES, type Motorcycle } from '../data/bikes';
 import { GitCompare, Sparkles, Check, X } from 'lucide-react';
+import { handleImageError } from '../utils/imageFallback';
 
 export const CompareBikes: React.FC = () => {
   // Pre-load slots with the first three bikes by default, leaving the fourth empty
@@ -133,6 +134,7 @@ export const CompareBikes: React.FC = () => {
                         <img
                           src={bike.heroImage}
                           alt={bike.name}
+                          onError={(e) => handleImageError(e, bike.category)}
                           className="max-h-28 object-contain relative z-10"
                         />
                       </div>

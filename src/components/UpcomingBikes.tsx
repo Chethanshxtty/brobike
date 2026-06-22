@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { UPCOMING_BIKES } from '../data/bikes';
 import { Calendar, BellRing, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { handleImageError } from '../utils/imageFallback';
 
 export const UpcomingBikes: React.FC = () => {
   const [notifiedId, setNotifiedId] = useState<string | null>(null);
@@ -91,6 +92,13 @@ export const UpcomingBikes: React.FC = () => {
                     <img
                       src={bike.image}
                       alt={bike.name}
+                      onError={(e) => {
+                        const name = bike.name.toLowerCase();
+                        let cat = 'sport';
+                        if (name.includes('himalayan') || name.includes('adventure') || name.includes('adv')) cat = 'adventure';
+                        else if (name.includes('ather') || name.includes('electric')) cat = 'electric';
+                        handleImageError(e, cat);
+                      }}
                       className="max-h-32 object-contain filter grayscale contrast-125 opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-500 transform hover:scale-105"
                     />
                   </div>

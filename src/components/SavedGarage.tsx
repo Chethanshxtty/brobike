@@ -1,6 +1,7 @@
 import React from 'react';
 import { type Motorcycle, MOTORCYCLES } from '../data/bikes';
 import { Heart, Trash2, Eye, TrendingDown, BellRing, Sparkles } from 'lucide-react';
+import { handleImageError } from '../utils/imageFallback';
 
 interface SavedGarageProps {
   savedIds: string[];
@@ -49,6 +50,7 @@ export const SavedGarage: React.FC<SavedGarageProps> = ({ savedIds, onRemove, on
                         <img
                           src={bike.heroImage}
                           alt={bike.name}
+                          onError={(e) => handleImageError(e, bike.category)}
                           className="max-h-16 object-contain relative z-10"
                         />
                       </div>

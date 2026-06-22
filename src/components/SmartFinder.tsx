@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { type Motorcycle, MOTORCYCLES } from '../data/bikes';
 import { Eye, Landmark, Compass, Award } from 'lucide-react';
+import { handleImageError } from '../utils/imageFallback';
 
 interface SmartFinderProps {
   onSelectBike: (bike: Motorcycle) => void;
@@ -17,7 +18,6 @@ const BUDGET_PRESETS = [
 ];
 
 const INDIAN_COMPANIES = [
-  'All Brands',
   'Royal Enfield',
   'Bajaj',
   'TVS',
@@ -28,45 +28,54 @@ const INDIAN_COMPANIES = [
 ];
 
 export const SmartFinder: React.FC<SmartFinderProps> = ({ onSelectBike }) => {
-  const [selectedPreset, setSelectedPreset] = useState<number | null>(null);
-  const [customBudget, setCustomBudget] = useState<string>('');
-  const [selectedBrand, setSelectedBrand] = useState<string>('All Brands');
+  const [budgetLimit, setBudgetLimit] = useState<number>(5.0); // Defaults to 5.0 Lakh (Show All)
+  const [customInput, setCustomInput] = useState<string>('');
+  const [brandFilterMode, setBrandFilterMode] = useState<'all' | 'custom'>('all');
+  const [selectedBrand, setSelectedBrand] = useState<string>('Royal Enfield');
 
-  // Derive the active budget limit
-  const activeBudget = customBudget !== '' 
-    ? parseFloat(customBudget) * 100000 // Convert Lakh to absolute rupee if it has a decimal
-    : (selectedPreset || 9900000); // Defaults to high number if none
+  // Derive the active budget limit in Rupees
+  const activeBudget = budgetLimit >= 5.0
+    ? 9900000 // Unlimited / Show All
+    : budgetLimit * 100000;
 
-  const handlePresetSelect = (value: number) => {
-    setSelectedPreset(value);
-    setCustomBudget((value / 100000).toFixed(1)); // Sync custom budget input in Lakh units
+  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = parseFloat(e.target.value);
+    setBudgetLimit(val);
+    setCustomInput(val >= 5.0 ? '' : val.toFixed(2));
   };
 
-  const handleCustomBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCustomInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     if (val === '' || /^\d*\.?\d*$/.test(val)) {
-      setCustomBudget(val);
-      // Check if it matches a preset
-      const numericVal = parseFloat(val) * 100000;
-      const foundPreset = BUDGET_PRESETS.find(p => p.value === numericVal);
-      if (foundPreset) {
-        setSelectedPreset(foundPreset.value);
+      setCustomInput(val);
+      if (val === '') {
+        setBudgetLimit(5.0);
       } else {
-        setSelectedPreset(null);
+        const parsed = parseFloat(val);
+        if (!isNaN(parsed) && parsed > 0) {
+          setBudgetLimit(parsed);
+        }
       }
     }
   };
 
+  const handlePresetSelect = (value: number) => {
+    const lakhVal = value / 100000;
+    setBudgetLimit(lakhVal);
+    setCustomInput(lakhVal.toFixed(2));
+  };
+
   const clearFilters = () => {
-    setSelectedPreset(null);
-    setCustomBudget('');
-    setSelectedBrand('All Brands');
+    setBudgetLimit(5.0);
+    setCustomInput('');
+    setBrandFilterMode('all');
+    setSelectedBrand('Royal Enfield');
   };
 
   // Filter only Indian company bikes matching budget and brand selections
   const filteredBikes = MOTORCYCLES.filter((bike) => {
     // 1. Brand check
-    if (selectedBrand !== 'All Brands' && bike.brand !== selectedBrand) {
+    if (brandFilterMode === 'custom' && bike.brand !== selectedBrand) {
       return false;
     }
 
@@ -76,7 +85,7 @@ export const SmartFinder: React.FC<SmartFinderProps> = ({ onSelectBike }) => {
     }
 
     return true;
-  });
+  }).sort((a, b) => a.price - b.price); // Default sorted from cheapest price to more expensive
 
   // EMI Calculator Helper: 20% down payment, 9.5% interest, 36 months
   const calculateEMI = (exShowroomPrice: number, rto: number, insurance: number, warranty: number) => {
@@ -120,60 +129,86 @@ export const SmartFinder: React.FC<SmartFinderProps> = ({ onSelectBike }) => {
           
           {/* Row 1: Budget Controls */}
           <div className="space-y-4">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-              <label className="font-anton text-xs tracking-wider uppercase text-slate-500">
-                1. SELECT OR ENTER BUDGET LIMIT
-              </label>
-              {activeBudget !== 9900000 && (
-                <span className="font-anton text-sm text-orange-600">
-                  Showing bikes up to ₹{(activeBudget / 100000).toFixed(2)} Lakh
-                </span>
-              )}
-            </div>
+            <label className="font-anton text-xs tracking-wider uppercase text-slate-500 block">
+              1. SELECT OR ENTER BUDGET LIMIT
+            </label>
             
-            {/* Presets Chips + Text Input */}
-            <div className="flex flex-wrap items-center gap-3">
-              {BUDGET_PRESETS.map((preset) => {
-                const isActive = selectedPreset === preset.value;
-                return (
-                  <button
-                    key={preset.value}
-                    onClick={() => handlePresetSelect(preset.value)}
-                    className={`px-4 py-2 text-xs font-anton uppercase rounded-full border transition-all duration-200 cursor-pointer ${
-                      isActive
-                        ? 'bg-orange-600 border-orange-600 text-white shadow-sm shadow-orange-500/20'
-                        : 'bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200/60'
-                    }`}
-                  >
-                    {preset.label}
-                  </button>
-                );
-              })}
+            {/* Range Slider + Inputs */}
+            <div className="space-y-6 bg-slate-50/50 p-6 rounded-2xl border border-slate-100">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div className="space-y-1">
+                  <span className="text-[10px] font-anton text-slate-400 uppercase tracking-widest block font-semibold">BUDGET RANGE FILTER</span>
+                  <div className="flex items-baseline gap-2">
+                    {budgetLimit >= 5.0 ? (
+                      <span className="font-anton text-2xl text-slate-900 uppercase">
+                        All Budgets (Cheapest to Expensive)
+                      </span>
+                    ) : (
+                      <>
+                        <span className="text-slate-500 font-inter text-xs">Up to</span>
+                        <span className="font-anton text-2xl text-slate-900 uppercase">
+                          ₹{budgetLimit.toFixed(2)} Lakh
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </div>
 
-              <button
-                onClick={() => {
-                  setSelectedPreset(null);
-                  setCustomBudget('');
-                }}
-                className={`px-4 py-2 text-xs font-anton uppercase rounded-full border transition-all duration-200 cursor-pointer ${
-                  selectedPreset === null && customBudget === ''
-                    ? 'bg-orange-600 border-orange-600 text-white shadow-sm shadow-orange-500/20'
-                    : 'bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200/60'
-                }`}
-              >
-                Show All
-              </button>
+                {/* Custom Input Box */}
+                <div className="flex items-center gap-2 border border-slate-200 bg-white px-4 py-2 rounded-xl w-full sm:w-auto sm:min-w-[180px]">
+                  <span className="text-[10px] font-anton text-slate-400 uppercase">Enter Lakh:</span>
+                  <input
+                    type="text"
+                    placeholder="e.g. 2.25"
+                    value={customInput}
+                    onChange={handleCustomInputChange}
+                    className="bg-transparent border-0 w-full focus:outline-none text-xs font-anton text-slate-800"
+                  />
+                </div>
+              </div>
 
-              {/* Custom Input Box */}
-              <div className="flex items-center gap-2 border border-slate-200 bg-slate-50 px-3 py-1.5 rounded-full min-w-[200px] ml-auto">
-                <span className="text-[10px] font-anton text-slate-400 uppercase">Custom (Lakh):</span>
+              {/* Styled Slider */}
+              <div className="relative pt-2">
                 <input
-                  type="text"
-                  placeholder="e.g. 2.25"
-                  value={customBudget}
-                  onChange={handleCustomBudgetChange}
-                  className="bg-transparent border-0 w-full focus:outline-none text-xs font-anton text-slate-800"
+                  type="range"
+                  min="1.0"
+                  max="5.0"
+                  step="0.05"
+                  value={budgetLimit}
+                  onChange={handleSliderChange}
+                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-orange-600"
                 />
+                <div className="flex justify-between text-[9px] font-anton text-slate-400 uppercase tracking-wider mt-2.5 px-0.5">
+                  <span>₹1.0 Lakh</span>
+                  <span>₹2.0 L</span>
+                  <span>₹3.0 L</span>
+                  <span>₹4.0 L</span>
+                  <span>₹5.0+ Lakh (Max)</span>
+                </div>
+              </div>
+
+              {/* Snap Presets */}
+              <div className="space-y-2.5">
+                <span className="text-[9px] font-anton text-slate-400 uppercase tracking-widest block font-semibold">QUICK SNAP LIMITS</span>
+                <div className="flex flex-wrap gap-2">
+                  {BUDGET_PRESETS.map((preset) => {
+                    const lakhVal = preset.value / 100000;
+                    const isActive = Math.abs(budgetLimit - lakhVal) < 0.01;
+                    return (
+                      <button
+                        key={preset.value}
+                        onClick={() => handlePresetSelect(preset.value)}
+                        className={`px-3 py-1.5 text-[10px] font-anton uppercase rounded-lg border transition-all duration-200 cursor-pointer ${
+                          isActive
+                            ? 'bg-orange-600 border-orange-600 text-white shadow-sm'
+                            : 'bg-white border-slate-200 text-slate-600 hover:border-slate-355 hover:bg-slate-50'
+                        }`}
+                      >
+                        {preset.label}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>
@@ -183,24 +218,72 @@ export const SmartFinder: React.FC<SmartFinderProps> = ({ onSelectBike }) => {
             <label className="font-anton text-xs tracking-wider uppercase text-slate-500 block">
               2. CHOOSE MANUFACTURER (INDIAN BRANDS)
             </label>
-            <div className="flex flex-wrap gap-2.5">
-              {INDIAN_COMPANIES.map((brand) => {
-                const isActive = selectedBrand === brand;
-                return (
-                  <button
-                    key={brand}
-                    onClick={() => setSelectedBrand(brand)}
-                    className={`px-4 py-2 text-xs font-anton uppercase border rounded-xl transition-all duration-200 cursor-pointer ${
-                      isActive
-                        ? 'bg-slate-900 border-slate-900 text-white shadow-sm'
-                        : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50'
-                    }`}
-                  >
-                    {brand === 'All Brands' ? '🇮🇳 All Indian Brands' : brand}
-                  </button>
-                );
-              })}
+
+            {/* Premium Dual-state Mode Toggler */}
+            <div className="flex bg-slate-100 p-1.5 rounded-2xl max-w-[280px] relative">
+              <button
+                onClick={() => setBrandFilterMode('all')}
+                className={`flex-1 py-2 text-xs font-anton uppercase rounded-xl relative transition-colors duration-300 z-10 cursor-pointer text-center ${
+                  brandFilterMode === 'all' ? 'text-white' : 'text-slate-500 hover:text-slate-800'
+                }`}
+              >
+                All Brands
+                {brandFilterMode === 'all' && (
+                  <motion.div
+                    layoutId="activeBrandMode"
+                    className="absolute inset-0 bg-slate-900 rounded-xl -z-10"
+                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                  />
+                )}
+              </button>
+              <button
+                onClick={() => setBrandFilterMode('custom')}
+                className={`flex-1 py-2 text-xs font-anton uppercase rounded-xl relative transition-colors duration-300 z-10 cursor-pointer text-center ${
+                  brandFilterMode === 'custom' ? 'text-white' : 'text-slate-500 hover:text-slate-800'
+                }`}
+              >
+                Choose Brands
+                {brandFilterMode === 'custom' && (
+                  <motion.div
+                    layoutId="activeBrandMode"
+                    className="absolute inset-0 bg-slate-900 rounded-xl -z-10"
+                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                  />
+                )}
+              </button>
             </div>
+
+            {/* Individual Brand Buttons (smooth fade drop-down) */}
+            <AnimatePresence>
+              {brandFilterMode === 'custom' && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="overflow-hidden pt-2"
+                >
+                  <div className="flex flex-wrap gap-2.5">
+                    {INDIAN_COMPANIES.map((brand) => {
+                      const isActive = selectedBrand === brand;
+                      return (
+                        <button
+                          key={brand}
+                          onClick={() => setSelectedBrand(brand)}
+                          className={`px-4 py-2.5 text-xs font-anton uppercase border rounded-xl transition-all duration-200 cursor-pointer ${
+                            isActive
+                              ? 'bg-slate-900 border-slate-900 text-white shadow-sm'
+                              : 'bg-white border-slate-200 text-slate-600 hover:border-slate-350 hover:bg-slate-50'
+                          }`}
+                        >
+                          {brand}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
         </div>
@@ -211,10 +294,10 @@ export const SmartFinder: React.FC<SmartFinderProps> = ({ onSelectBike }) => {
             <h3 className="font-anton text-xs tracking-widest text-slate-400 uppercase">
               MATCHING MACHINES ({filteredBikes.length})
             </h3>
-            {(selectedBrand !== 'All Brands' || customBudget !== '' || selectedPreset !== null) && (
+            {(brandFilterMode !== 'all' || budgetLimit < 5.0) && (
               <button
                 onClick={clearFilters}
-                className="text-xs font-anton text-orange-600 hover:underline uppercase"
+                className="text-xs font-anton text-orange-600 hover:underline uppercase cursor-pointer"
               >
                 Clear Filters ×
               </button>
@@ -265,6 +348,7 @@ export const SmartFinder: React.FC<SmartFinderProps> = ({ onSelectBike }) => {
                           <img
                             src={bike.heroImage}
                             alt={bike.name}
+                            onError={(e) => handleImageError(e, bike.category)}
                             className="max-h-36 object-contain transform group-hover:scale-105 transition-transform duration-500 relative z-10"
                           />
                         </div>

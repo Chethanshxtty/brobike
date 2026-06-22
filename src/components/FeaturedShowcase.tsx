@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { type Motorcycle, MOTORCYCLES } from '../data/bikes';
 import { Compass, Eye, ShieldCheck, Zap } from 'lucide-react';
+import { handleImageError } from '../utils/imageFallback';
 
 interface FeaturedShowcaseProps {
   onSelectBike: (bike: Motorcycle) => void;
@@ -139,6 +140,7 @@ export const FeaturedShowcase: React.FC<FeaturedShowcaseProps> = ({ onSelectBike
                   transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                   src={bike.heroImage}
                   alt={bike.name}
+                  onError={(e) => handleImageError(e, bike.category)}
                   className="max-h-[350px] md:max-h-[480px] object-contain relative z-10 cursor-pointer"
                 />
               </div>
