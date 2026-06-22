@@ -3,6 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Sparkles, User, ShieldAlert, BadgeCheck, Wrench } from 'lucide-react';
 import { MOTORCYCLES, type Motorcycle } from '../data/bikes';
 
+let messageCounter = 0;
+const getUniqueId = (prefix: string) => {
+  messageCounter += 1;
+  return `${prefix}-${messageCounter}-${Math.random().toString(36).substring(2, 9)}`;
+};
 
 interface Message {
   id: string;
@@ -53,79 +58,76 @@ export const BroAI: React.FC<BroAIProps> = ({ onSelectBike }) => {
     if (q.includes('2 lakh') || q.includes('lakh') || q.includes('200000') || q.includes('budget') || q.includes('price')) {
       const budgetBikes = MOTORCYCLES.filter(b => b.price <= 200000);
       return {
-        text: `Under ₹2 Lakh, we have exactly what you need. The **BRO-EcoPulse 150** fits comfortably at ₹1.2L Ex-showroom (approx ₹1.4L on-road), while the futuristic **BRO-Cyber S** is available at ₹1.85L.`,
+        text: `Under ₹2 Lakh, we have several outstanding models. The **TVS Raider 125** is incredibly budget-friendly at ₹95k ex-showroom, while the **Hero Karizma XMR** and **Bajaj Pulsar NS400Z** offer immense value at ₹1.79L and ₹1.85L respectively.`,
         recommendations: budgetBikes,
         reasoning: "These models offer the lowest cost of entry without compromising on tech features like smart digital dashes, phone sync, and ABS.",
         pros: ["Extremely affordable initial purchase", "Lowest ownership and fuel/charging costs", "Lightweight, easy to navigate in dense city traffic"],
-        cons: ["Not designed for high speed highway touring", "Lower top speeds compared to premium performance classes"],
-        ownershipEstimate: "EcoPulse: ~₹3,500/year service. Cyber S: virtually zero maintenance, charging at ~₹40/charge.",
-        riderType: "Urban commuters, students, and eco-conscious riders seeking maximum value."
+        cons: ["Lower engine capacity on entry models", "Moderate top speeds on basic commuter classes"],
+        ownershipEstimate: "Annual maintenance ranges between ₹2,400 to ₹4,500 depending on model.",
+        riderType: "Urban commuters, students, and riders seeking premium features at an accessible price."
       };
     }
 
     if (q.includes('mileage') || q.includes('fuel') || q.includes('efficiency') || q.includes('economy')) {
-      const mileageBikes = [
-        MOTORCYCLES.find(b => b.id === 'ecopulse-150')!,
-        MOTORCYCLES.find(b => b.id === 'cyber-s')!
-      ].filter(Boolean);
+      const mileageBikes = MOTORCYCLES.filter(b => b.mileage.realWorld >= 35 || b.category === 'Electric');
       return {
-        text: `If high mileage is your priority, the **BRO-EcoPulse 150** is our fuel champ offering a record 72 km/l. Alternatively, go fully electric with the **BRO-Cyber S** for a 180 km range on a single charge.`,
+        text: `If fuel economy is your priority, the **TVS Raider 125** is the efficiency champion delivering 67 km/l real-world mileage. For fully electric commuting, the **Ola S1 Pro Gen 2** offers a range of up to 143 km real-world.`,
         recommendations: mileageBikes,
-        reasoning: "Both are designed specifically to optimize energy consumption per kilometer. The EcoPulse uses a highly efficient 155cc single-cylinder FI motor, while the Cyber S uses regenerative braking to recoup power.",
-        pros: ["Saves up to ₹45,000/year in fuel costs", "Large tank range on EcoPulse (12L x 72km = 850km+)", "Quiet and smooth power delivery"],
-        cons: ["Moderate acceleration and lower horsepower specs"],
-        ownershipEstimate: "Monthly fuel/electricity cost under ₹800 (for 30km daily commutes).",
-        riderType: "Daily office commuters, long distance delivery riders, and budget-conscious buyers."
+        reasoning: "These models optimize running costs. The petrol models feature low-displacement fuel-injected engines, while the electric models use regenerative braking to maximize range.",
+        pros: ["Saves significantly on daily commuting costs", "Extensive riding range on a single refuel/charge", "Smooth and eco-friendly city driving profiles"],
+        cons: ["More relaxed power output specifications", "Electric models require charging down-time"],
+        ownershipEstimate: "Monthly energy/fuel cost is minimal, typically under ₹800 to ₹1,200.",
+        riderType: "Daily city commuters, office riders, and efficiency-focused buyers."
       };
     }
 
     if (q.includes('electric') || q.includes('ev') || q.includes('battery') || q.includes('charging')) {
       const evBike = MOTORCYCLES.filter(b => b.category === 'Electric');
       return {
-        text: `The **BRO-Cyber S** is our premier electric vehicle, featuring a 5.2 kWh lithium pack and instant 76 Nm torque from 0 RPM.`,
+        text: `We offer a premium electric lineup led by the high-performance **Ultraviolette F77 Mach 2** (30 kW peak power) and smart family options like the **Ather 450X Gen 4** and **Ola S1 Pro Gen 2**.`,
         recommendations: evBike,
-        reasoning: "Designed to replace conventional petrol commuters with an ultra-connected smart bike that receives over-the-air (OTA) feature updates.",
-        pros: ["Instant throttle response", "No gears - fully clutchless twist-and-go", "Zero carbon emissions and silent operation"],
-        cons: ["90 minutes fast-charge time required", "Highway range decreases at sustained high speeds"],
-        ownershipEstimate: "Charging costs around ₹0.22 per km. Scheduled maintenance is less than ₹1,500/year.",
-        riderType: "Tech enthusiasts, urban professionals, and early adopters of electric technology."
+        reasoning: "These electric models feature advanced software, over-the-air (OTA) updates, touchscreens, and silent direct-drive performance.",
+        pros: ["Instant electric torque", "Clutchless twist-and-go operation", "Extremely low operating and maintenance costs"],
+        cons: ["Requires battery recharging time", "Reduced range at sustained high highway speeds"],
+        ownershipEstimate: "Electricity charge bills around ₹0.22 per km. Scheduled servicing costs under ₹1,500/year.",
+        riderType: "Tech-savvy urban professionals and early adopters of green EV technology."
       };
     }
 
     if (q.includes('offroad') || q.includes('off-road') || q.includes('adventure') || q.includes('tour') || q.includes('dirt')) {
       const advBike = MOTORCYCLES.filter(b => b.category === 'Adventure');
       return {
-        text: `For adventure and off-roading, the **BRO-Terra 850** is built for extreme trails. It features 220mm ground clearance and long-travel suspension.`,
+        text: `For rough terrain and exploration, the **Royal Enfield Himalayan 450** (Sherpa liquid-cooled engine) and the lightweight **Hero XPulse 200 4V** are highly capable off-road partners.`,
         recommendations: advBike,
-        reasoning: "Built with a parallel-twin engine delivering 95 PS of torque and multi-spoke tubeless rims designed to handle impacts.",
-        pros: ["Comfortable upright riding ergonomics", "Luggage-ready frame with standard hard mounts", "Dedicated Offroad Pro ride modes"],
-        cons: ["Tall seat height (850mm) makes it challenging for shorter riders", "Weighs 212kg which takes skill to handle off-road"],
-        ownershipEstimate: "Annual service costs ~₹6,500. Tough chassis minimizes cosmetic damage during drops.",
-        riderType: "Weekend explorers, highway tourers, and off-road trail riders."
+        reasoning: "Equipped with long-travel front suspension, high ground clearance, dual-purpose tyres, and spoked wheel layouts for trail duty.",
+        pros: ["Comfortable upright riding postures", "High-ground clearance to clear major obstacles", "Tough, impact-resistant chassis architecture"],
+        cons: ["Higher seat heights (up to 825mm)", "Heavier weight profiles compared to city streetfighters"],
+        ownershipEstimate: "Annual service costs average ₹3,200 to ₹5,800. Sturdy crash guards minimize drop damage.",
+        riderType: "Off-road explorers, weekend tourers, and adventure enthusiasts."
       };
     }
 
     if (q.includes('sport') || q.includes('speed') || q.includes('racing') || q.includes('fast') || q.includes('track')) {
       const sportBikes = MOTORCYCLES.filter(b => b.category === 'Sport');
       return {
-        text: `For pure speed and tracking, the **BRO-Veloce 1000** is a 165 PS beast that rockets 0-100 km/h in 2.9 seconds.`,
+        text: `For adrenaline and aggressive riding, the **TVS Apache RTR 310** features class-leading stability tech, complemented by the perimeter-frame **Bajaj Pulsar NS200** and aerodynamic **Hero Karizma XMR**.`,
         recommendations: sportBikes,
-        reasoning: "Features an inline-4 engine, dual-channel cornering ABS, and a bi-directional quickshifter for quick lap times.",
-        pros: ["Breathtaking 299 km/h top speed", "Sharpest race track cornering dynamics", "Intimidating inline-4 exhaust soundtrack"],
-        cons: ["Aggressive forward-leaning stance can cause fatigue", "High fuel consumption in city crawls (12 km/l)"],
-        ownershipEstimate: "Annual service: ~₹9,500. Premium high-performance tyres require replacement every 12,000 km.",
-        riderType: "Adrenaline seekers, track day riders, and experienced enthusiasts."
+        reasoning: "These streetfighters utilize liquid-cooled DOHC engines, high-revving gearing, and perimeter chassis designs for cornering agility.",
+        pros: ["High cornering speeds and quick throttle response", "Aggressive naked or fully faired styling aesthetics", "Performance features like quickshifters and slipper clutches"],
+        cons: ["Sporty forward-leaning posture can cause fatigue", "Lower fuel economy compared to standard commuters"],
+        ownershipEstimate: "Annual tuning and oil servicing averages ₹3,500 to ₹5,500.",
+        riderType: "Track enthusiasts, sporty street riders, and performance seekers."
       };
     }
 
     // Default Fallback
     return {
-      text: `Interesting request! Based on standard parameters, the **BRO-Veloce 1000** leads for performance, **BRO-Terra 850** for touring, and the **BRO-Cyber S** for futuristic smart city commuting.`,
+      text: `Interesting request! Based on standard parameters, the **TVS Apache RTR 310** leads for performance, **Royal Enfield Himalayan 450** for touring, and the **Ultraviolette F77 Mach 2** for electric innovation.`,
       recommendations: MOTORCYCLES.slice(0, 3),
       reasoning: "We offer tailored solutions spanning sport, adventure, cruiser, and electric classes.",
       pros: ["Industry-leading safety features", "High resale values", "Premium connected instrumentation"],
       cons: ["Each bike is specialized for its exact target riding type"],
-      ownershipEstimate: "Varies from ₹1,500/year (Electric) to ₹12,000/year (Premium Cruiser).",
+      ownershipEstimate: "Varies from ₹1,200/year (Electric) to ₹5,800/year (Adventure touring).",
       riderType: "Any passionate motorcycle rider."
     };
   };
@@ -134,13 +136,13 @@ export const BroAI: React.FC<BroAIProps> = ({ onSelectBike }) => {
     if (!text.trim()) return;
 
     const userMsg: Message = {
-      id: `user-${Date.now()}`,
+      id: getUniqueId('user'),
       sender: 'user',
       text
     };
 
     const typingMsg: Message = {
-      id: `typing-${Date.now()}`,
+      id: getUniqueId('typing'),
       sender: 'ai',
       text: '',
       isTyping: true
@@ -152,7 +154,7 @@ export const BroAI: React.FC<BroAIProps> = ({ onSelectBike }) => {
     setTimeout(() => {
       const aiData = generateAIResponse(text);
       const readyMsg: Message = {
-        id: `ai-${Date.now()}`,
+        id: getUniqueId('ai'),
         sender: 'ai',
         text: aiData.text || '',
         recommendations: aiData.recommendations,
